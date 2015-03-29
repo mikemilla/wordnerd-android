@@ -1331,10 +1331,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             }
         });
+        
         if (points > 0) {
             mTimerBar.setVisibility(View.VISIBLE);
         }
-        //advanceWordList();
 
         /**
          * Show points as the new score
