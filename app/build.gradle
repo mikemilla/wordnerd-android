@@ -1,0 +1,23 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 21
+    buildToolsVersion '21.0.0'
+
+    defaultConfig {
+        applicationId "com.mikemilla.wordnerd"
+        minSdkVersion 15
+        targetSdkVersion 21
+        versionCode 10
+        versionName ".18"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    compile 'com.google.android.gms:play-services:6.5.87'
+    compile project(':BaseGameUtils')
+}
