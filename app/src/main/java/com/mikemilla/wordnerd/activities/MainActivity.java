@@ -11,7 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
@@ -39,7 +38,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.scale_out);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.scale_out);
             }
         });
 
@@ -53,7 +52,9 @@ public class MainActivity extends Activity {
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Start Game", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.scale_out);
             }
         });
 

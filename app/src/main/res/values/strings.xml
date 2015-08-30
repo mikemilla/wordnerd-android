@@ -52,5 +52,6 @@
     <string name="sign_in_to_upload_this_score">Sign in now to upload this score, save your achievements and share your progress with friends.</string>
     <string name="title_activity_word_nerd">WordNerd</string>
     <string name="title_activity_test_main">TestMain</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>
