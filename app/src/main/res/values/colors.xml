@@ -21,4 +21,9 @@
     <color name="dark_grey">#171717</color>
 
     <color name="main_background">#0099cc</color>
+
+    <color name="black26">#42000000</color>
+    <color name="white26">#42FFFFFF</color>
+    <color name="white54">#8Affffff</color>
+
 </resources>

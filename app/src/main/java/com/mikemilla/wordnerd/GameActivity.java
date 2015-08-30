@@ -12,7 +12,6 @@
 package com.mikemilla.wordnerd;
 
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -50,14 +48,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
-import com.google.example.games.basegameutils.BaseGameUtils;
 import com.mikemilla.wordnerd.words.*;
 import com.mikemilla.wordnerd.words.Number;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 
 public class GameActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
