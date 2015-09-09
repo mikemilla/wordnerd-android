@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class AndroidBug5497Workaround {
 
@@ -19,7 +16,7 @@ public class AndroidBug5497Workaround {
     }
 
     private View mChildOfContent;
-    static int usableHeightPrevious;
+    private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
 
     private AndroidBug5497Workaround(Activity activity) {
@@ -38,12 +35,10 @@ public class AndroidBug5497Workaround {
         if (usableHeightNow != usableHeightPrevious) {
             int usableHeightSansKeyboard = mChildOfContent.getRootView().getHeight();
             int heightDifference = usableHeightSansKeyboard - usableHeightNow;
-
-            if (heightDifference > (usableHeightSansKeyboard / 4)) {
+            if (heightDifference > (usableHeightSansKeyboard/4)) {
                 // keyboard probably just became visible
                 frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
-            }
-            else {
+            } else {
                 // keyboard probably just became hidden
                 frameLayoutParams.height = usableHeightSansKeyboard;
             }

@@ -1089,7 +1089,7 @@ public class GameActivity extends Activity implements
                             getWindowManager().getDefaultDisplay().getMetrics(dm);
                             int width = dm.widthPixels;
                             int height = dm.heightPixels;
-                            parent.addView(view, width, height - AndroidBug5497Workaround.usableHeightPrevious);
+                            //parent.addView(view, width, height - AndroidBug5497Workaround.usableHeightPrevious);
 
                             /**
                              * Instantiate the rules text and set font

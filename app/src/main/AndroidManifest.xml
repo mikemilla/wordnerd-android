@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mikemilla.wordnerd" >
+    package="com.mikemilla.wordnerd">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     v
@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.games.APP_ID"
             android:value="@string/app_id" />
@@ -19,7 +19,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_word_nerd"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
 
             <!--
             <intent-filter>
@@ -32,7 +32,7 @@
         <!-- New Main -->
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,12 +41,11 @@
         </activity>
         <activity
             android:name=".activities.AboutActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.GameActivity"
-            android:label="@string/title_activity_game" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible" />
     </application>
 
 </manifest>

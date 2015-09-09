@@ -418,7 +418,7 @@ public class GameFragmentOld extends Fragment implements View.OnClickListener {
                 }
 
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) scoreCard.getLayoutParams();
-                params.setMargins(0, -AndroidBug5497Workaround.usableHeightPrevious, 0, 0); //substitute parameters for left, top, right, bottom
+                //params.setMargins(0, -AndroidBug5497Workaround.usableHeightPrevious, 0, 0); //substitute parameters for left, top, right, bottom
                 scoreCard.setLayoutParams(params);
 
                 //rhymeArea.startAnimation(slideUpOutAnimation);
@@ -1486,6 +1486,7 @@ public class GameFragmentOld extends Fragment implements View.OnClickListener {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         final int height = displaymetrics.heightPixels;
 
+        /*
         if (AndroidBug5497Workaround.usableHeightPrevious == height) {
             userRhyme.postDelayed(new Runnable() {
                 @Override
@@ -1495,6 +1496,7 @@ public class GameFragmentOld extends Fragment implements View.OnClickListener {
                 }
             }, 50);
         }
+        */
 
         updateUi();
     }
