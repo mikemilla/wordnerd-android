@@ -1,10 +1,9 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,12 +11,13 @@ import android.widget.TextView;
 
 import com.mikemilla.wordnerd.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
 public class AboutActivity extends Activity {
 
@@ -38,8 +38,7 @@ public class AboutActivity extends Activity {
     private static final String TAG_PHONE_HOME = "home";
     private static final String TAG_PHONE_OFFICE = "office";
 
-    // contacts JSONArray
-    JSONArray contacts = null;
+    private JSONObject jObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,85 +55,28 @@ public class AboutActivity extends Activity {
             }
         });
 
-        // Run and find the JSON
-        new JSONParse().execute();
+        String filename = "example.json";
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
 
-        textView = (TextView) findViewById(R.id.text_view);
-
-    }
-
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
-
-        private ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(AboutActivity.this);
-            pDialog.setMessage("Getting Data ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... args) {
-
-            JSONParser jParser = new JSONParser();
-
-            // Getting JSON from URL
-            return jParser.getJSONFromUrl(url);
-
-        }
-        @Override
-        protected void onPostExecute(JSONObject json) {
-
-            pDialog.dismiss();
-
-            // Hashmap
-            ArrayList<HashMap<String, String>> contactList = new ArrayList<>();
-
+        try {
+            FileInputStream stream = new FileInputStream(file);
+            String jString = null;
             try {
-                // Getting Array of Contacts
-                contacts = json.getJSONArray(TAG_CONTACTS);
-
-                // looping through All Contacts
-                for (int i = 0; i < contacts.length(); i++) {
-                    JSONObject c = contacts.getJSONObject(i);
-
-                    // Storing each json item in variable
-                    String id = c.getString(TAG_ID);
-                    String name = c.getString(TAG_NAME);
-                    String email = c.getString(TAG_EMAIL);
-                    String address = c.getString(TAG_ADDRESS);
-                    String gender = c.getString(TAG_GENDER);
-
-                    // Phone number is again JSON Object
-                    JSONObject phone = c.getJSONObject(TAG_PHONE);
-                    String mobile = phone.getString(TAG_PHONE_MOBILE);
-                    String home = phone.getString(TAG_PHONE_HOME);
-                    String office = phone.getString(TAG_PHONE_OFFICE);
-
-                    // creating new HashMap
-                    HashMap<String, String> map = new HashMap<>();
-
-                    // adding each child node to HashMap key => value
-                    map.put(TAG_ID, id);
-                    map.put(TAG_NAME, name);
-                    map.put(TAG_EMAIL, email);
-                    map.put(TAG_PHONE_MOBILE, mobile);
-
-                    // adding HashList to ArrayList
-                    contactList.add(map);
-                }
-
-                textView.setText(contactList.get(0).toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                FileChannel fc = stream.getChannel();
+                MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+                /* Instead of using default, pass in a decoder. */
+                jString = Charset.defaultCharset().decode(bb).toString();
+            }
+            finally {
+                stream.close();
             }
 
-        }
+            jObject = new JSONObject(jString);
+
+        } catch (Exception e) {e.printStackTrace();}
+
+        textView = (TextView) findViewById(R.id.text_view);
+        textView.setText(jObject.toString());
     }
 
     @Override

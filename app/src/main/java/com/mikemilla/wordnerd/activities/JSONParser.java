@@ -29,6 +29,8 @@ public class JSONParser {
         // Making HTTP request
         try {
 
+            //gson
+
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);

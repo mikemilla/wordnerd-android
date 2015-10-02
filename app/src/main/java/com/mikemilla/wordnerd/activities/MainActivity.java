@@ -1,9 +1,13 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.widget.RelativeLayout;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 
     private EightBitNominalTextView startGameButton;
@@ -24,6 +30,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_main);
+
+        // Get the latest words or make a new json for them
+        updateWordList();
 
         // Background Color
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main);
@@ -64,6 +73,24 @@ public class MainActivity extends Activity {
 
         // Start the Animation Loop
         animateTapToPlay();
+    }
+
+    private void updateWordList() {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("http://api.androidhive.info/contacts/"));
+        request.allowScanningByMediaScanner();
+
+        //getApplicationContext().getFilesDir().getAbsolutePath()
+        String filename = "example.json";
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
+        if (file.exists()) {
+            file.delete();
+        }
+
+        // get download service and enqueue file
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
     }
 
     private void animateTapToPlay() {
