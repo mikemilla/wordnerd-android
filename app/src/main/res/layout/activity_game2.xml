@@ -30,13 +30,12 @@
             android:textSize="25sp" />
 
         <com.mikemilla.wordnerd.views.EightBitNominalTextView
-            android:id="@+id/rhyme_match"
+            android:id="@+id/rhyme_generated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:paddingBottom="72dp"
-            android:text="dope"
             android:textColor="#ffffff"
             android:textSize="38sp" />
 

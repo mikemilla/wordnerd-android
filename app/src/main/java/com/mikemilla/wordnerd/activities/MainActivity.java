@@ -5,6 +5,8 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
@@ -25,6 +28,7 @@ public class MainActivity extends Activity {
 
     private EightBitNominalTextView startGameButton;
     private Animation fadeIn, fadeOut;
+    public static boolean isFirstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_new_main);
 
         // Get the latest words or make a new json for them
-        updateWordList();
+        if (isOnline() && isFirstLoad) {
+            updateWordList();
+            isFirstLoad = false;
+        }
 
         // Background Color
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main);
@@ -76,21 +83,28 @@ public class MainActivity extends Activity {
     }
 
     private void updateWordList() {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("http://api.androidhive.info/contacts/"));
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("http://www.mikemilla.com/words.json"));
         request.allowScanningByMediaScanner();
 
         //getApplicationContext().getFilesDir().getAbsolutePath()
-        String filename = "example.json";
+        String filename = "words.json";
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
 
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
         if (file.exists()) {
             file.delete();
+            Toast.makeText(MainActivity.this, "Updated Words!", Toast.LENGTH_SHORT).show();
         }
 
         // get download service and enqueue file
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private void animateTapToPlay() {
