@@ -145,7 +145,7 @@ public class MainActivity extends Activity {
 
                 }
 
-                Log.d("Words Have Been Generated", words.toString());
+                Log.d("Words Generated", words.toString());
 
             }
         });

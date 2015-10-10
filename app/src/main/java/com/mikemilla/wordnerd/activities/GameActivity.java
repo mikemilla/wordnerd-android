@@ -1,16 +1,24 @@
 package com.mikemilla.wordnerd.activities;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Vibrator;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.mikemilla.wordnerd.AndroidBug5497Workaround;
@@ -20,17 +28,25 @@ import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
-public class GameActivity extends Activity {
+public class GameActivity extends FragmentActivity {
 
     // User Interface
+    ScoreFragment scoreFragment;
+    EightBitNominalTextView scoreTextView;
     EightBitNominalEditText rhymeEntry;
     EightBitNominalTextView rhymeGenerated;
+    CountDownTimer countdownTimer;
+    ProgressBar progressBar;
+    int progress;
     Boolean isKeyboardOpen = false;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
+    HashSet<String> hashedRhymes = new HashSet<>();
     int index = 0;
+    int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +93,8 @@ public class GameActivity extends Activity {
             }
         });
 
-        // Word to Rhyme with
-        rhymeGenerated = (EightBitNominalTextView) findViewById(R.id.rhyme_generated);
-        rhymeGenerated.setText(words.get(index).getWord());
+        // Setup Score TextView
+        scoreTextView = (EightBitNominalTextView) findViewById(R.id.score);
 
         // Rhyme entry area and text change listener
         rhymeEntry = (EightBitNominalEditText) findViewById(R.id.rhyme_entry);
@@ -96,8 +111,6 @@ public class GameActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                /*
                 String space = s.toString().replaceAll(" ", "");
                 String back = s.toString().replaceAll("\\u003F", "");
                 if (!s.toString().equals(space)) {
@@ -108,11 +121,105 @@ public class GameActivity extends Activity {
                     rhymeEntry.setText(back);
                     rhymeEntry.setSelection(back.length());
                 }
-                */
 
-                rhymeGenerated.setText(words.get(index++).getWord());
+                // Engine
+                String userInput = s.toString().toLowerCase();
+                if (!rhymeGenerated.getText().toString().equals(userInput)) {
+                    if (!hashedRhymes.contains(userInput)) {
+                        if (words.get(index).getSingles().contains(userInput)) {
+                            crunchTheWord(1, userInput);
+                            generateNewWord();
+                        } else if (words.get(index).getDoubles().contains(userInput)) {
+                            crunchTheWord(2, userInput);
+                            generateNewWord();
+                        }
+                    } else {
+                        rhymeEntry.setText(null);
+                    }
+                } else {
+                    rhymeEntry.setText(null);
+                }
+
             }
         });
+
+        // Word to Rhyme with
+        rhymeGenerated = (EightBitNominalTextView) findViewById(R.id.rhyme_generated);
+        generateNewWord();
+
+        // Setup Progressbar
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    public void crunchTheWord(int pointsAwarded, String userInput) {
+
+        // Make progress bar visible if hidden
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        // Cancel timer if running
+        if (index != 0) {
+            countdownTimer.cancel();
+        }
+
+        // Start timer
+        runCountdownTimer();
+
+        // Reapply time animation
+        progressBar.setProgress(4000);
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progress);
+        animation.setDuration(4000);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.start();
+
+        // Increment, score, save words
+        index++;
+        score += pointsAwarded;
+        hashedRhymes.add(userInput);
+        Log.d("Rhymes Played", hashedRhymes.toString());
+    }
+
+    public void generateNewWord() {
+        rhymeGenerated.setText(words.get(index).getWord());
+        rhymeEntry.setText(null);
+
+        if (score == 0) {
+            scoreTextView.setText(null);
+        } else {
+            scoreTextView.setText(String.valueOf(score));
+        }
+
+        Log.d("Acceptable Rhymes", words.get(index).getSingles() + "" + words.get(index).getDoubles() + "");
+    }
+
+    private void runCountdownTimer() {
+        countdownTimer = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progress = (int) (millisUntilFinished / 1000);
+                progressBar.setProgress(progress);
+            }
+
+            @Override
+            public void onFinish() {
+
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(250);
+
+                progressBar.setProgress(0);
+
+                scoreFragment = ScoreFragment.newInstance(score);
+                if (findViewById(R.id.game_over_container) != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_up, R.anim.scale_out)
+                            .add(R.id.game_over_container, scoreFragment)
+                            .commit();
+                }
+            }
+        };
+        countdownTimer.start();
     }
 
     public void fixFullscreenKeyboardBug(final Activity activity) {
@@ -151,9 +258,25 @@ public class GameActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
-        overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
+        if (!scoreFragment.isAdded()) {
+            super.onBackPressed();
+            this.finish();
+            overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.scale_in, R.anim.slide_out_down)
+                    .remove(scoreFragment)
+                    .commit();
+
+            // Reset the game
+            score = 0;
+            index = 0;
+            words = new ArrayList<>();
+            words = MainActivity.words;
+            Collections.shuffle(words);
+            hashedRhymes = new HashSet<>();
+            generateNewWord();
+        }
     }
 
     @Override
