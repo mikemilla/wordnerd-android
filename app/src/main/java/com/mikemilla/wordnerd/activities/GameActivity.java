@@ -3,7 +3,6 @@ package com.mikemilla.wordnerd.activities;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -210,7 +209,7 @@ public class GameActivity extends FragmentActivity {
 
                 progressBar.setProgress(0);
 
-                scoreFragment = ScoreFragment.newInstance(score);
+                scoreFragment = ScoreFragment.newInstance(score, index);
                 if (findViewById(R.id.game_over_container) != null) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_up, R.anim.scale_out)

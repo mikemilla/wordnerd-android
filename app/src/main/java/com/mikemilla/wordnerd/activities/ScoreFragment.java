@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ public class ScoreFragment extends Fragment {
 
     public static String SCORE_KEY = "score";
     public static String HIGH_SCORE_KEY = "high_score";
+    public static String CURRENT_WORD_INDEX_KEY = "current_word_index";
     GameActivity gameActivity;
     EightBitNominalTextView scoreTextView;
     EightBitNominalTextView highScoreTextView;
@@ -34,13 +36,10 @@ public class ScoreFragment extends Fragment {
 
         // Reference the parent activity
         gameActivity = (GameActivity) getActivity();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(gameActivity);
 
         scoreTextView = (EightBitNominalTextView) view.findViewById(R.id.score_text_view);
-        scoreTextView.setText(String.valueOf(getArguments().getInt(SCORE_KEY)));
-
         highScoreTextView = (EightBitNominalTextView) view.findViewById(R.id.high_score_text_view);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(gameActivity);
 
         int highScore = preferences.getInt(HIGH_SCORE_KEY, 0);
         if (getArguments().getInt(SCORE_KEY) > highScore) {
@@ -52,6 +51,11 @@ public class ScoreFragment extends Fragment {
         } else {
             highScoreTextView.setText(String.valueOf(highScore));
         }
+        scoreTextView.setText(String.valueOf(getArguments().getInt(SCORE_KEY)));
+
+        Log.d("Current Word", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getWord());
+        Log.d("Current Acceptables", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getSingles()
+                + gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getDoubles().toString());
 
         View dummy = view.findViewById(R.id.dummy);
         dummy.setOnClickListener(new View.OnClickListener() {
@@ -64,11 +68,12 @@ public class ScoreFragment extends Fragment {
         return view;
     }
 
-    public static ScoreFragment newInstance(int score) {
+    public static ScoreFragment newInstance(int score, int currentIndex) {
 
         ScoreFragment fragment = new ScoreFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(SCORE_KEY, score);
+        bundle.putInt(CURRENT_WORD_INDEX_KEY, currentIndex);
         fragment.setArguments(bundle);
 
         return fragment;
