@@ -29,12 +29,7 @@ public class AboutActivity extends Activity {
     OkHttpClient client;
     TextView textView;
 
-
     List<Words> words = new ArrayList<>();
-
-    List<String> parsedWords = new ArrayList<>();
-    List<List<String>> parsedSingles = new ArrayList<>();
-    List<List<String>> parsedDoubles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,24 +87,22 @@ public class AboutActivity extends Activity {
                     //parsedWords.add(word);
 
                     // Add the singles
-                    List<String> singlesList = new ArrayList<>();
+                    ArrayList<String> singlesList = new ArrayList<>();
                     if (responseObj.getWords().get(i).getRhymes().getSingles() != null) {
                         for (int s = 0; s < responseObj.getWords().get(i).getRhymes().getSingles().size(); s++) {
                             String singles = responseObj.getWords().get(i).getRhymes().getSingles().get(s);
                             singlesList.add(singles);
                         }
                     }
-                    parsedSingles.add(singlesList);
 
                     // Add the Doubles
-                    List<String> doublesList = new ArrayList<>();
+                    ArrayList<String> doublesList = new ArrayList<>();
                     if (responseObj.getWords().get(i).getRhymes().getDoubles() != null) {
                         for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getDoubles().size(); d++) {
                             String doubles = responseObj.getWords().get(i).getRhymes().getDoubles().get(d);
                             doublesList.add(doubles);
                         }
                     }
-                    parsedDoubles.add(doublesList);
 
                     words.add(new Words(word, singlesList, doublesList));
 

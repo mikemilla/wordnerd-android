@@ -1,15 +1,11 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -22,45 +18,29 @@ import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalEditText;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class GameActivity extends Activity {
 
-    // JSON Node names
-    private static final String TAG_WORDS = "words";
-    private static final String TAG_WORD = "word";
-    private static final String TAG_ID = "id";
-    private static final String TAG_RHYMES = "rhymes";
-    private static final String TAG_SINGLES = "singles";
-
+    // User Interface
     EightBitNominalEditText rhymeEntry;
     EightBitNominalTextView rhymeGenerated;
     Boolean isKeyboardOpen = false;
 
-    ArrayList<String> parsedWords = new ArrayList<>();
-
-    private JSONObject jObject;
-    JSONArray words = null;
-    String filename = "words.json";
-    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
-    int wordIndex = 0;
+    // Data
+    ArrayList<Words> words = new ArrayList<>();
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game2);
 
-        // Run and find the JSON words
-        //new JSONParse().execute();
-
-
+        // Get parsed word objects from Main Activity
+        // I know it's static. Don't shoot me
+        words = MainActivity.words;
+        Collections.shuffle(words);
 
         // Keyboard / Full screen Bug Fix
         fixFullscreenKeyboardBug(this);
@@ -99,6 +79,7 @@ public class GameActivity extends Activity {
 
         // Word to Rhyme with
         rhymeGenerated = (EightBitNominalTextView) findViewById(R.id.rhyme_generated);
+        rhymeGenerated.setText(words.get(index).getWord());
 
         // Rhyme entry area and text change listener
         rhymeEntry = (EightBitNominalEditText) findViewById(R.id.rhyme_entry);
@@ -115,6 +96,8 @@ public class GameActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                /*
                 String space = s.toString().replaceAll(" ", "");
                 String back = s.toString().replaceAll("\\u003F", "");
                 if (!s.toString().equals(space)) {
@@ -125,27 +108,9 @@ public class GameActivity extends Activity {
                     rhymeEntry.setText(back);
                     rhymeEntry.setSelection(back.length());
                 }
+                */
 
-                rhymeGenerated.setText(parsedWords.get(wordIndex += 1));
-
-                JSONObject rhymes;
-                try {
-                    rhymes = jObject.getJSONObject(TAG_RHYMES);
-                    JSONArray singles = rhymes.getJSONArray(TAG_SINGLES);
-
-                    Log.d("jObject", jObject.toString());
-                    Log.d("rhymes", rhymes.toString());
-                    Log.d("singles", singles.toString());
-
-                    /*
-                    for (int i = 0; i < singles.length(); i++) {
-                        Log.d("SINGLES", singles.toString());
-                    }
-                    */
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                rhymeGenerated.setText(words.get(index++).getWord());
             }
         });
     }
@@ -194,93 +159,6 @@ public class GameActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
-    }
-
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
-
-        private ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(GameActivity.this);
-            pDialog.setMessage("Getting Data ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... args) {
-
-            JSONParser jParser = new JSONParser();
-
-            // Getting JSON from URL
-            return jParser.getJSONfromDevice(file);
-
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject json) {
-
-            pDialog.dismiss();
-
-            // Hashmap
-            ArrayList<HashMap<String, String>> contactList = new ArrayList<>();
-
-            try {
-                // Getting Array of Contacts
-                words = json.getJSONArray(TAG_WORDS);
-
-                // looping through All Contacts
-                for (int i = 0; i < words.length(); i++) {
-                    jObject = words.getJSONObject(i);
-
-                    String words = jObject.getString(TAG_WORD);
-                    parsedWords.add(words);
-
-                    Collections.shuffle(parsedWords);
-                    rhymeGenerated.setText(parsedWords.get(wordIndex));
-                }
-
-                JSONObject first = words.getJSONObject(0).getJSONObject(TAG_RHYMES);
-                Log.d("first", first.toString());
-
-                /*
-                // looping through All Contacts
-                for (int i = 0; i < words.length(); i++) {
-                    jObject = words.getJSONObject(i);
-
-                    String words = jObject.getString(TAG_WORD);
-                    parsedWords.add(words);
-
-                    Collections.shuffle(parsedWords);
-                    rhymeGenerated.setText(parsedWords.get(wordIndex));
-                }
-
-                Log.d("parsedWords", parsedWords.toString());
-
-                String words = jObject.getString(TAG_WORD);
-                JSONObject rhymes = jObject.getJSONObject(TAG_RHYMES);
-                JSONArray singles = rhymes.getJSONArray(TAG_SINGLES);
-
-                for (int i = 0; i < singles.length(); i++) {
-                    Log.d("words", words);
-                    Log.d("rhymes", rhymes.toString());
-                    Log.d("singles", singles.toString());
-                }
-
-                //Log.d("jObject", jObject.toString());
-                //Log.d("words", words);
-                //Log.d("rhymes", rhymes.toString());
-                //Log.d("singles", singles.toString());
-                */
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
 }

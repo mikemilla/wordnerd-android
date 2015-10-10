@@ -1,34 +1,41 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
     private EightBitNominalTextView startGameButton;
     private Animation fadeIn, fadeOut;
-    public static boolean isFirstLoad = true;
+
+    Gson gson;
+    Response responseObj;
+    OkHttpClient client;
+
+    public static ArrayList<Words> words = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +43,16 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_new_main);
 
         // Get the latest words or make a new json for them
-        if (isOnline() && isFirstLoad) {
-            updateWordList();
-            isFirstLoad = false;
+        File file = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)));
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(file, cacheSize);
+        client = new OkHttpClient();
+        client.setCache(cache);
+
+        try {
+            run();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // Background Color
@@ -82,29 +96,59 @@ public class MainActivity extends Activity {
         animateTapToPlay();
     }
 
-    private void updateWordList() {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse("http://www.mikemilla.com/words.json"));
-        request.allowScanningByMediaScanner();
+    public void run() throws Exception {
+        Request request = new Request.Builder()
+                .url("http://www.mikemilla.com/words.json")
+                .build();
 
-        //getApplicationContext().getFilesDir().getAbsolutePath()
-        String filename = "words.json";
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
 
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
-        if (file.exists()) {
-            file.delete();
-            Toast.makeText(MainActivity.this, "Updated Words!", Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        // get download service and enqueue file
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-    }
+                // Cache expiration
+                response.header("Cache-Control: max-age=1800");
 
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+                gson = new Gson();
+                responseObj = gson.fromJson(response.body().charStream(), Response.class);
+                for (int i = 0; i < responseObj.getWords().size(); i++) {
+
+                    // Add the words
+                    String word = responseObj.getWords().get(i).getWord();
+
+                    // Add the singles
+                    ArrayList<String> singlesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getSingles() != null) {
+                        for (int s = 0; s < responseObj.getWords().get(i).getRhymes().getSingles().size(); s++) {
+                            String singles = responseObj.getWords().get(i).getRhymes().getSingles().get(s);
+                            singlesList.add(singles);
+                        }
+                    }
+
+                    // Add the Doubles
+                    ArrayList<String> doublesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getDoubles() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getDoubles().size(); d++) {
+                            String doubles = responseObj.getWords().get(i).getRhymes().getDoubles().get(d);
+                            doublesList.add(doubles);
+                        }
+                    }
+
+                    // Create a new word object
+                    // Add it to the words list
+                    words.add(new Words(word, singlesList, doublesList));
+
+                }
+
+                Log.d("Words Have Been Generated", words.toString());
+
+            }
+        });
     }
 
     private void animateTapToPlay() {
@@ -195,4 +239,5 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
+
 }
