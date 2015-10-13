@@ -13,7 +13,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.plus.Plus;
 import com.google.gson.Gson;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
@@ -26,7 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private EightBitNominalTextView startGameButton;
     private Animation fadeIn, fadeOut;
@@ -34,6 +40,7 @@ public class MainActivity extends Activity {
     Gson gson;
     Response responseObj;
     OkHttpClient client;
+    GoogleApiClient mGoogleApiClient;
 
     public static ArrayList<Words> words = new ArrayList<>();
 
@@ -94,6 +101,13 @@ public class MainActivity extends Activity {
 
         // Start the Animation Loop
         animateTapToPlay();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .build();
     }
 
     public void run() throws Exception {
@@ -240,4 +254,35 @@ public class MainActivity extends Activity {
         return false;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mGoogleApiClient.isConnected()) {
+            Toast.makeText(getApplicationContext(), "onStart - Already Connected", Toast.LENGTH_LONG).show();
+        } else {
+            mGoogleApiClient.connect();
+            Toast.makeText(getApplicationContext(), "onStart - Not Already Connected", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Google Play Games
+     */
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("Mike", "onConnected() called. Sign in successful!");
+        Toast.makeText(getApplicationContext(), "onConnected - Connected", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("Mike", "onConnectionSuspended() called. Trying to reconnect.");
+        Toast.makeText(getApplicationContext(), "onConnectionSuspended - Trying to Reconnect", Toast.LENGTH_LONG).show();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("Mike", "onConnectionFailed() called, result: " + connectionResult);
+    }
 }

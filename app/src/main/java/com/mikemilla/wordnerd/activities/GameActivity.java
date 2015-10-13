@@ -257,7 +257,7 @@ public class GameActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (!scoreFragment.isAdded()) {
+        if (scoreFragment == null || !scoreFragment.isAdded()) {
             super.onBackPressed();
             this.finish();
             overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);

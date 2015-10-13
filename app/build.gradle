@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion '21.1.2'
 
     defaultConfig {
         applicationId "com.mikemilla.wordnerd"
         minSdkVersion 15
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 10
         versionName ".18"
     }
@@ -19,8 +19,9 @@ android {
     }
 }
 dependencies {
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.android.gms:play-services-games:8.1.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     //compile project(':BaseGameUtils')
