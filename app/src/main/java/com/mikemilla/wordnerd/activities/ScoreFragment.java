@@ -62,6 +62,9 @@ public class ScoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 gameActivity.onBackPressed();
+                gameActivity.backButton.setVisibility(View.VISIBLE);
+                gameActivity.backButton.startAnimation(gameActivity.backButtonSlideInLeft);
+                gameActivity.rhymeGenerated.startAnimation(gameActivity.slideInRight);
             }
         });
 

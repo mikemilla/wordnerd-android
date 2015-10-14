@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,8 +16,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -36,10 +40,13 @@ public class GameActivity extends FragmentActivity {
     EightBitNominalTextView scoreTextView;
     EightBitNominalEditText rhymeEntry;
     EightBitNominalTextView rhymeGenerated;
+    ImageButton backButton;
     CountDownTimer countdownTimer;
     ProgressBar progressBar;
     int progress;
     Boolean isKeyboardOpen = false;
+    Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
+    View cursorView;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
@@ -70,16 +77,18 @@ public class GameActivity extends FragmentActivity {
                 android.util.Log.d("isKeyboardOpen", "" + isKeyboardOpen);
 
                 if (isKeyboardOpen) {
-                    findViewById(R.id.main).setBackgroundColor(getResources().getColor(R.color.blue));
+                    findViewById(R.id.main).setBackgroundColor(
+                            ContextCompat.getColor(GameActivity.this, R.color.blue));
                 } else {
-                    findViewById(R.id.main).setBackgroundColor(getResources().getColor(R.color.red));
+                    findViewById(R.id.main).setBackgroundColor(
+                            ContextCompat.getColor(GameActivity.this, R.color.green));
                 }
             }
         });
 
         // Main Content Area
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main);
-        main.setBackgroundColor(getResources().getColor(R.color.black));
+        main.setBackgroundColor(ContextCompat.getColor(this, R.color.blue));
 
         // Game Content Area
         RelativeLayout game = (RelativeLayout) findViewById(R.id.game);
@@ -89,6 +98,19 @@ public class GameActivity extends FragmentActivity {
                 if (!isKeyboardOpen) {
                     openKeyboard();
                 }
+            }
+        });
+
+        // Animated cursor view
+        cursorView = findViewById(R.id.cursor_animation_view);
+
+        // Back Button
+        backButton = (ImageButton) findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GameActivity.this.finish();
+                overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
             }
         });
 
@@ -121,22 +143,42 @@ public class GameActivity extends FragmentActivity {
                     rhymeEntry.setSelection(back.length());
                 }
 
+                if (rhymeEntry.getText().length() <= 0) {
+                    cursorView.setVisibility(View.VISIBLE);
+                } else {
+                    cursorView.setVisibility(View.GONE);
+                }
+
                 // Engine
                 String userInput = s.toString().toLowerCase();
                 if (!rhymeGenerated.getText().toString().equals(userInput)) {
                     if (!hashedRhymes.contains(userInput)) {
                         if (words.get(index).getSingles().contains(userInput)) {
                             crunchTheWord(1, userInput);
-                            generateNewWord();
                         } else if (words.get(index).getDoubles().contains(userInput)) {
                             crunchTheWord(2, userInput);
-                            generateNewWord();
+                        } else if (words.get(index).getTriples().contains(userInput)) {
+                            crunchTheWord(3, userInput);
+                        } else if (words.get(index).getQuadruples().contains(userInput)) {
+                            crunchTheWord(4, userInput);
+                        } else if (words.get(index).getQuintuples().contains(userInput)) {
+                            crunchTheWord(5, userInput);
+                        } else if (words.get(index).getSextuples().contains(userInput)) {
+                            crunchTheWord(6, userInput);
+                        } else if (words.get(index).getSeptuples().contains(userInput)) {
+                            crunchTheWord(7, userInput);
+                        } else if (words.get(index).getOctuples().contains(userInput)) {
+                            crunchTheWord(8, userInput);
+                        } else if (words.get(index).getNonuples().contains(userInput)) {
+                            crunchTheWord(9, userInput);
+                        } else if (words.get(index).getDecuples().contains(userInput)) {
+                            crunchTheWord(10, userInput);
                         }
                     } else {
-                        rhymeEntry.setText(null);
+                        rhymeEntry.startAnimation(shake);
                     }
                 } else {
-                    rhymeEntry.setText(null);
+                    rhymeEntry.startAnimation(shake);
                 }
 
             }
@@ -149,6 +191,29 @@ public class GameActivity extends FragmentActivity {
         // Setup Progressbar
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
+
+        // Create animations
+        slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
+        backButtonSlideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        backButtonSlideInLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+        shake.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                rhymeEntry.setText(null);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     public void crunchTheWord(int pointsAwarded, String userInput) {
@@ -156,6 +221,23 @@ public class GameActivity extends FragmentActivity {
         // Make progress bar visible if hidden
         if (progressBar.getVisibility() != View.VISIBLE) {
             progressBar.setVisibility(View.VISIBLE);
+            backButton.startAnimation(backButtonSlideOutLeft);
+            backButtonSlideOutLeft.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    backButton.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
         }
 
         // Cancel timer if running
@@ -178,6 +260,26 @@ public class GameActivity extends FragmentActivity {
         score += pointsAwarded;
         hashedRhymes.add(userInput);
         Log.d("Rhymes Played", hashedRhymes.toString());
+
+        // Animate Word Change
+        rhymeGenerated.startAnimation(slideOutLeft);
+        slideOutLeft.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                generateNewWord();
+                rhymeGenerated.startAnimation(slideInRight);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     public void generateNewWord() {
@@ -188,6 +290,9 @@ public class GameActivity extends FragmentActivity {
             scoreTextView.setText(null);
         } else {
             scoreTextView.setText(String.valueOf(score));
+            if (index == 1) {
+                scoreTextView.startAnimation(slideInRight);
+            }
         }
 
         Log.d("Acceptable Rhymes", words.get(index).getSingles() + "" + words.get(index).getDoubles() + "");
@@ -208,6 +313,7 @@ public class GameActivity extends FragmentActivity {
                 v.vibrate(250);
 
                 progressBar.setProgress(0);
+                progressBar.setVisibility(View.GONE);
 
                 scoreFragment = ScoreFragment.newInstance(score, index);
                 if (findViewById(R.id.game_over_container) != null) {
@@ -253,6 +359,15 @@ public class GameActivity extends FragmentActivity {
     public void onPause() {
         super.onPause();
         closeKeyboard();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        closeKeyboard();
+        if (countdownTimer != null) {
+            countdownTimer.cancel();
+        }
     }
 
     @Override

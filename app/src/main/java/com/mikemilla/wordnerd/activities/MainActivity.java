@@ -2,10 +2,10 @@ package com.mikemilla.wordnerd.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -64,12 +64,11 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
         // Background Color
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main);
-        main.setBackgroundColor(getResources().getColor(R.color.blue));
+        main.setBackgroundColor(ContextCompat.getColor(this, R.color.blue));
 
         // Menu Button
         ImageButton menuButton = (ImageButton) findViewById(R.id.menu_button);
-        menuButton.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        menuButton.setAlpha(0.54f);
+        menuButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,9 +137,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     // Add the singles
                     ArrayList<String> singlesList = new ArrayList<>();
                     if (responseObj.getWords().get(i).getRhymes().getSingles() != null) {
-                        for (int s = 0; s < responseObj.getWords().get(i).getRhymes().getSingles().size(); s++) {
-                            String singles = responseObj.getWords().get(i).getRhymes().getSingles().get(s);
-                            singlesList.add(singles);
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getSingles().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getSingles().get(d);
+                            singlesList.add(words);
                         }
                     }
 
@@ -148,14 +147,88 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
                     ArrayList<String> doublesList = new ArrayList<>();
                     if (responseObj.getWords().get(i).getRhymes().getDoubles() != null) {
                         for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getDoubles().size(); d++) {
-                            String doubles = responseObj.getWords().get(i).getRhymes().getDoubles().get(d);
-                            doublesList.add(doubles);
+                            String words = responseObj.getWords().get(i).getRhymes().getDoubles().get(d);
+                            doublesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> triplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getTriples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getTriples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getTriples().get(d);
+                            triplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> quadruplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getQuadruples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getQuadruples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getQuadruples().get(d);
+                            quadruplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> quintuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getQuintuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getQuintuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getQuintuples().get(d);
+                            quintuplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> sextuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getSextuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getSextuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getSextuples().get(d);
+                            sextuplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> septuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getSeptuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getSeptuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getSeptuples().get(d);
+                            septuplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> octuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getOctuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getOctuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getOctuples().get(d);
+                            octuplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> nonuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getNonuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getNonuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getNonuples().get(d);
+                            nonuplesList.add(words);
+                        }
+                    }
+
+                    // Add the Triples
+                    ArrayList<String> decuplesList = new ArrayList<>();
+                    if (responseObj.getWords().get(i).getRhymes().getDecuples() != null) {
+                        for (int d = 0; d < responseObj.getWords().get(i).getRhymes().getDecuples().size(); d++) {
+                            String words = responseObj.getWords().get(i).getRhymes().getDecuples().get(d);
+                            decuplesList.add(words);
                         }
                     }
 
                     // Create a new word object
                     // Add it to the words list
-                    words.add(new Words(word, singlesList, doublesList));
+                    words.add(new Words(word, singlesList, doublesList, triplesList,
+                            quadruplesList, quintuplesList, sextuplesList, septuplesList,
+                            octuplesList, nonuplesList, decuplesList));
 
                 }
 
@@ -261,7 +334,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             Toast.makeText(getApplicationContext(), "onStart - Already Connected", Toast.LENGTH_LONG).show();
         } else {
             mGoogleApiClient.connect();
-            Toast.makeText(getApplicationContext(), "onStart - Not Already Connected", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "onStart - Not Already Connected", Toast.LENGTH_LONG).show();
         }
     }
 

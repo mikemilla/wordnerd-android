@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/progress_bar"
             android:layout_gravity="center_vertical|right"
+            android:layout_marginTop="10dp"
             android:padding="25dp"
             android:textSize="25sp" />
 
@@ -38,12 +38,19 @@
             android:textColor="#ffffff"
             android:textSize="38sp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white" />
+
         <com.mikemilla.wordnerd.views.EightBitNominalEditText
             android:id="@+id/rhyme_entry"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
+            android:cursorVisible="false"
             android:gravity="center"
             android:imeOptions="actionPrevious"
             android:inputType="textAutoCorrect"
@@ -51,11 +58,27 @@
             android:paddingRight="16dp"
             android:textSize="32sp" />
 
+        <View
+            android:id="@+id/cursor_animation_view"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/purple" />
+
     </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/game_over_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/green"
+        android:src="@drawable/close" />
 
 </RelativeLayout>
