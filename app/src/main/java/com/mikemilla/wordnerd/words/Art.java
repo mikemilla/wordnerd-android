@@ -1,128 +1,125 @@
 package com.mikemilla.wordnerd.words;
 
-import com.mikemilla.wordnerd.Syllables;
+public class Art {
 
-import java.util.ArrayList;
-
-public class Art implements Syllables {
-
-    public static ArrayList<String> singles = new ArrayList<String>();
-    public static ArrayList<String> doubles = new ArrayList<String>();
-    public static ArrayList<String> triples = new ArrayList<String>();
-    public static ArrayList<String> quadruples = new ArrayList<String>();
-    public static ArrayList<String> quintuples = new ArrayList<String>();
-    public static ArrayList<String> sextuples = new ArrayList<String>();
+    /*
+    public static ArrayList<String> singles = new ArrayList<String>(,
+    public static ArrayList<String> doubles = new ArrayList<String>(,
+    public static ArrayList<String> triples = new ArrayList<String>(,
+    public static ArrayList<String> quadruples = new ArrayList<String>(,
+    public static ArrayList<String> quintuples = new ArrayList<String>(,
+    public static ArrayList<String> sextuples = new ArrayList<String>(,
 
     public Art() {
-        singles.add("BART");
-        singles.add("CART");
-        singles.add("CHART");
-        singles.add("DART");
-        singles.add("FART");
-        singles.add("HAART");
-        singles.add("HARDT");
-        singles.add("HART");
-        singles.add("HEART");
-        singles.add("MAHRT");
-        singles.add("MART");
-        singles.add("PART");
-        singles.add("SCHARDT");
-        singles.add("SMART");
-        singles.add("START");
-        singles.add("TART");
+        "bart",
+        "cart",
+        "chart",
+        "dart",
+        "fart",
+        "haart",
+        "hardt",
+        "hart",
+        "heart",
+        "mahrt",
+        "mart",
+        "part",
+        "schardt",
+        "smart",
+        "start",
+        "tart",
 
-        doubles.add("AHART");
-        doubles.add("APART");
-        doubles.add("BOSSART");
-        doubles.add("DEPART");
-        doubles.add("DESCARTES");
-        doubles.add("GOULART");
-        doubles.add("IMPART");
-        doubles.add("KABART");
-        doubles.add("MCCART");
-        doubles.add("RESTART");
+        "ahart",
+        "apart",
+        "bossart",
+        "depart",
+        "descartes",
+        "goulart",
+        "impart",
+        "kabart",
+        "mccart",
+        "restart",
 
-        singles.add("BERT");
-        singles.add("BIRT");
-        singles.add("BLURT");
-        singles.add("BORT");
-        singles.add("BURT");
-        singles.add("CHERT");
-        singles.add("CORT");
-        singles.add("COURT");
-        singles.add("CURT");
-        singles.add("DIRT");
-        singles.add("DORT");
-        singles.add("FLIRT");
-        singles.add("FORT");
-        singles.add("GIRT");
-        singles.add("HURT");
-        singles.add("MORT");
-        singles.add("ORT");
-        singles.add("PEART");
-        singles.add("PERT");
-        singles.add("PORT");
-        singles.add("QUART");
-        singles.add("SHIRT");
-        singles.add("SHORT");
-        singles.add("SKIRT");
-        singles.add("SNORT");
-        singles.add("SORT");
-        singles.add("SPORT");
-        singles.add("SPURT");
-        singles.add("SQUIRT");
-        singles.add("SWART");
-        singles.add("THWART");
-        singles.add("TORT");
-        singles.add("VERT");
-        singles.add("WART");
-        singles.add("WERT");
-        singles.add("YURT");
+        "bert",
+        "birt",
+        "blurt",
+        "bort",
+        "burt",
+        "chert",
+        "cort",
+        "court",
+        "curt",
+        "dirt",
+        "dort",
+        "flirt",
+        "fort",
+        "girt",
+        "hurt",
+        "mort",
+        "ort",
+        "peart",
+        "pert",
+        "port",
+        "quart",
+        "shirt",
+        "short",
+        "skirt",
+        "snort",
+        "sort",
+        "sport",
+        "spurt",
+        "squirt",
+        "swart",
+        "thwart",
+        "tort",
+        "vert",
+        "wart",
+        "wert",
+        "yurt",
 
-        doubles.add("ABORT");
-        doubles.add("ALERT");
-        doubles.add("ASSERT");
-        doubles.add("ASSORT");
-        doubles.add("ATHWART");
-        doubles.add("AVERT");
-        doubles.add("CAVORT");
-        doubles.add("COMPORT");
-        doubles.add("CONCERT");
-        doubles.add("CONSORT");
-        doubles.add("CONTORT");
-        doubles.add("CONVERT");
-        doubles.add("DEPORT");
-        doubles.add("DESERT");
-        doubles.add("DESSERT");
-        doubles.add("DISTORT");
-        doubles.add("DIVERT");
-        doubles.add("ESCORT");
-        doubles.add("EVERT");
-        doubles.add("EXERT");
-        doubles.add("EXHORT");
-        doubles.add("EXTORT");
-        doubles.add("FORTE");
-        doubles.add("IMPORT");
-        doubles.add("INERT");
-        doubles.add("INSERT");
-        doubles.add("INVERT");
-        doubles.add("OVERT");
-        doubles.add("PERVERT");
-        doubles.add("PURPORT");
-        doubles.add("REPORT");
-        doubles.add("RESORT");
-        doubles.add("REVERT");
-        doubles.add("STUART");
-        doubles.add("SUBVERT");
-        doubles.add("SUPPORT");
-        doubles.add("TRANSPORT");
-        doubles.add("TURRET");
-        doubles.add("UNHURT");
+        "abort",
+        "alert",
+        "assert",
+        "assort",
+        "athwart",
+        "avert",
+        "cavort",
+        "comport",
+        "concert",
+        "consort",
+        "contort",
+        "convert",
+        "deport",
+        "desert",
+        "dessert",
+        "distort",
+        "divert",
+        "escort",
+        "evert",
+        "exert",
+        "exhort",
+        "extort",
+        "forte",
+        "import",
+        "inert",
+        "insert",
+        "invert",
+        "overt",
+        "pervert",
+        "purport",
+        "report",
+        "resort",
+        "revert",
+        "stuart",
+        "subvert",
+        "support",
+        "transport",
+        "turret",
+        "unhurt",
 
-        triples.add("DISCONCERT");
-        triples.add("MISREPORT");
-        triples.add("REASSERT");
-        triples.add("TELEPORT");
+        "disconcert",
+        "misreport",
+        "reassert",
+        "teleport",
     }
 
     public ArrayList<String> getSingleSyllables() {
@@ -149,4 +146,5 @@ public class Art implements Syllables {
     public ArrayList<String> getSextupleSyllables() {
         return sextuples;
     }
+    */
 }

@@ -58,13 +58,13 @@
             android:paddingRight="16dp"
             android:textSize="32sp" />
 
-        <View
+        <ImageView
             android:id="@+id/cursor_animation_view"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/purple" />
+            android:scaleType="centerInside" />
 
     </RelativeLayout>
 

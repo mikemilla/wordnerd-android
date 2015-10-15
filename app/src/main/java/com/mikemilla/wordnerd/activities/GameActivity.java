@@ -3,6 +3,7 @@ package com.mikemilla.wordnerd.activities;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -32,6 +34,7 @@ import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Random;
 
 public class GameActivity extends FragmentActivity {
 
@@ -46,7 +49,8 @@ public class GameActivity extends FragmentActivity {
     int progress;
     Boolean isKeyboardOpen = false;
     Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
-    View cursorView;
+    ImageView cursorView;
+    AnimationDrawable animationA, animationB, animationC;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
@@ -102,7 +106,12 @@ public class GameActivity extends FragmentActivity {
         });
 
         // Animated cursor view
-        cursorView = findViewById(R.id.cursor_animation_view);
+        animationA = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animation_a);
+        animationB = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animation_b);
+        animationC = (AnimationDrawable) ContextCompat.getDrawable(this, R.drawable.animation_c);
+        cursorView = (ImageView) findViewById(R.id.cursor_animation_view);
+        cursorView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        setRandomCursorAnimation();
 
         // Back Button
         backButton = (ImageButton) findViewById(R.id.back_button);
@@ -145,6 +154,7 @@ public class GameActivity extends FragmentActivity {
 
                 if (rhymeEntry.getText().length() <= 0) {
                     cursorView.setVisibility(View.VISIBLE);
+                    setRandomCursorAnimation();
                 } else {
                     cursorView.setVisibility(View.GONE);
                 }
@@ -285,6 +295,7 @@ public class GameActivity extends FragmentActivity {
     public void generateNewWord() {
         rhymeGenerated.setText(words.get(index).getWord());
         rhymeEntry.setText(null);
+        setRandomCursorAnimation();
 
         if (score == 0) {
             scoreTextView.setText(null);
@@ -325,6 +336,34 @@ public class GameActivity extends FragmentActivity {
             }
         };
         countdownTimer.start();
+    }
+
+    // Generate a random animated drawable for the cursor
+    public void setRandomCursorAnimation() {
+        int min = 0;
+        int max = 2;
+        Random random = new Random();
+        int range = max - min + 1;
+        int randomNumber =  random.nextInt(range) + min;
+        AnimationDrawable animation = new AnimationDrawable();
+
+        switch (randomNumber) {
+            case 0: {
+                animation = animationA;
+                break;
+            }
+            case 1: {
+                animation = animationB;
+                break;
+            }
+            case 2: {
+                animation = animationC;
+                break;
+            }
+        }
+
+        cursorView.setImageDrawable(animation);
+        animation.start();
     }
 
     public void fixFullscreenKeyboardBug(final Activity activity) {

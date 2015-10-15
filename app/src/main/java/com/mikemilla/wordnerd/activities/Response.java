@@ -16,13 +16,8 @@ public class Response {
 
     public static class WordsEntity {
 
-        private String id;
         private String word;
         private RhymesEntity rhymes;
-
-        public void setId(String id) {
-            this.id = id;
-        }
 
         public void setWord(String word) {
             this.word = word;
@@ -30,10 +25,6 @@ public class Response {
 
         public void setRhymes(RhymesEntity rhymes) {
             this.rhymes = rhymes;
-        }
-
-        public String getId() {
-            return id;
         }
 
         public String getWord() {
