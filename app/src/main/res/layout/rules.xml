@@ -24,7 +24,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="@string/rule_one"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -37,7 +36,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="@string/rule_two"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -50,7 +48,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="@string/rule_three"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -64,7 +61,6 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="@string/rule_four"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="bold" />

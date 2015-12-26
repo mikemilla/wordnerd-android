@@ -23,4 +23,9 @@
         android:layout_alignParentBottom="true"
         android:background="@color/blue" />
 
+    <Button
+        android:id="@+id/leaderboard"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
 </RelativeLayout>

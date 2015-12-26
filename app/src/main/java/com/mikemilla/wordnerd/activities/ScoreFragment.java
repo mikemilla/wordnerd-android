@@ -1,20 +1,26 @@
 package com.mikemilla.wordnerd.activities;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.games.Games;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class ScoreFragment extends Fragment {
 
+    private static final int REQUEST_LEADERBOARD = 0;
     public static String SCORE_KEY = "score";
     public static String HIGH_SCORE_KEY = "high_score";
     public static String CURRENT_WORD_INDEX_KEY = "current_word_index";
@@ -41,21 +47,41 @@ public class ScoreFragment extends Fragment {
         scoreTextView = (EightBitNominalTextView) view.findViewById(R.id.score_text_view);
         highScoreTextView = (EightBitNominalTextView) view.findViewById(R.id.high_score_text_view);
 
+        // Last score that was played
+        int lastScore = getArguments().getInt(SCORE_KEY);
+
+        // Unlock Achievements Google Play Games
+        if (gameActivity.getGoogleApiClient() != null && gameActivity.getGoogleApiClient().isConnected()) {
+            unlockAchievements(lastScore);
+        }
+
         int highScore = preferences.getInt(HIGH_SCORE_KEY, 0);
-        if (getArguments().getInt(SCORE_KEY) > highScore) {
+        if (lastScore > highScore) {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(HIGH_SCORE_KEY, getArguments().getInt(SCORE_KEY));
+            editor.putInt(HIGH_SCORE_KEY, lastScore);
             editor.apply();
             Toast.makeText(gameActivity, "New Best Score", Toast.LENGTH_SHORT).show();
-            highScoreTextView.setText(String.valueOf(getArguments().getInt(SCORE_KEY)));
+            highScoreTextView.setText(String.valueOf(lastScore));
+
+            // Set new high score on Google Play Games
+            if (gameActivity.getGoogleApiClient() != null && gameActivity.getGoogleApiClient().isConnected()) {
+                Games.Leaderboards.submitScore(gameActivity.getGoogleApiClient(),
+                        getString(R.string.leaderboard_high_scores), lastScore);
+            }
+
         } else {
             highScoreTextView.setText(String.valueOf(highScore));
         }
-        scoreTextView.setText(String.valueOf(getArguments().getInt(SCORE_KEY)));
+        scoreTextView.setText(String.valueOf(lastScore));
 
-        Log.d("Current Word", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getWord());
-        Log.d("Current Acceptables", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getSingles()
-                + gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getDoubles().toString());
+        try {
+            Log.d("Current Word", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getWord());
+            Log.d("Current Entry", gameActivity.rhymeEntry.getText().toString());
+            //Log.d("Current Acceptables", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getSingles()
+                    //+ gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getDoubles().toString());
+        } catch (Exception e) {
+            Toast.makeText(gameActivity, "" + e, Toast.LENGTH_SHORT).show();
+        }
 
         View dummy = view.findViewById(R.id.dummy);
         dummy.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +94,40 @@ public class ScoreFragment extends Fragment {
             }
         });
 
+        Button leaderboard = (Button) view.findViewById(R.id.leaderboard);
+        leaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gameActivity.getGoogleApiClient() != null) {
+                    if (gameActivity.getGoogleApiClient().isConnected()) {
+                        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
+                                gameActivity.getGoogleApiClient(),
+                                getString(R.string.leaderboard_high_scores)), REQUEST_LEADERBOARD);
+                    } else {
+                        showGooglePlayDialog();
+                    }
+                }
+            }
+        });
+
         return view;
+    }
+
+    public void showGooglePlayDialog() {
+        new AlertDialog.Builder(gameActivity)
+                .setTitle("Sign into Google Play Games?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Defaults.setSignIntoGooglePlayGames(true, gameActivity);
+                        gameActivity.getGameHelper().beginUserInitiatedSignIn();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Defaults.setSignIntoGooglePlayGames(false, gameActivity);
+                    }
+                })
+                .show();
     }
 
     public static ScoreFragment newInstance(int score, int currentIndex) {
@@ -80,6 +139,22 @@ public class ScoreFragment extends Fragment {
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    public void unlockAchievements(int score) {
+        Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_rhyme_time)); // First Rhyme
+        if (score >= 10) {
+            Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_decade_made)); // Ten Points
+        }
+        if (score >= 20) {
+            Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_spaghetti_twenty)); // Twenty Points
+        }
+        if (score >= 30) {
+            Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_dirty_thirty)); // Thirty Points
+        }
+        if (score >= 40) {
+            Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_forty_shortie)); // Forty Points
+        }
     }
 
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,9 +24,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.mikemilla.wordnerd.AndroidBug5497Workaround;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.example.games.basegameutils.BaseGameActivity;
+import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.Words;
 import com.mikemilla.wordnerd.views.EightBitNominalEditText;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
@@ -36,7 +40,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
-public class GameActivity extends FragmentActivity {
+public class GameActivity extends BaseGameActivity {
 
     // User Interface
     ScoreFragment scoreFragment;
@@ -51,6 +55,7 @@ public class GameActivity extends FragmentActivity {
     Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
     ImageView cursorView;
     AnimationDrawable animationA, animationB, animationC;
+    GoogleApiClient mGoogleApiClient;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
@@ -63,9 +68,7 @@ public class GameActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game2);
 
-        // Get parsed word objects from Main Activity
-        // I know it's static. Don't shoot me
-        words = MainActivity.words;
+        words = Defaults.getWordList(GameActivity.this);
         Collections.shuffle(words);
 
         // Keyboard / Full screen Bug Fix
@@ -160,35 +163,39 @@ public class GameActivity extends FragmentActivity {
                 }
 
                 // Engine
-                String userInput = s.toString().toLowerCase();
-                if (!rhymeGenerated.getText().toString().equals(userInput)) {
-                    if (!hashedRhymes.contains(userInput)) {
-                        if (words.get(index).getSingles().contains(userInput)) {
-                            crunchTheWord(1, userInput);
-                        } else if (words.get(index).getDoubles().contains(userInput)) {
-                            crunchTheWord(2, userInput);
-                        } else if (words.get(index).getTriples().contains(userInput)) {
-                            crunchTheWord(3, userInput);
-                        } else if (words.get(index).getQuadruples().contains(userInput)) {
-                            crunchTheWord(4, userInput);
-                        } else if (words.get(index).getQuintuples().contains(userInput)) {
-                            crunchTheWord(5, userInput);
-                        } else if (words.get(index).getSextuples().contains(userInput)) {
-                            crunchTheWord(6, userInput);
-                        } else if (words.get(index).getSeptuples().contains(userInput)) {
-                            crunchTheWord(7, userInput);
-                        } else if (words.get(index).getOctuples().contains(userInput)) {
-                            crunchTheWord(8, userInput);
-                        } else if (words.get(index).getNonuples().contains(userInput)) {
-                            crunchTheWord(9, userInput);
-                        } else if (words.get(index).getDecuples().contains(userInput)) {
-                            crunchTheWord(10, userInput);
+                try {
+                    String userInput = s.toString().toLowerCase();
+                    if (!rhymeGenerated.getText().toString().equals(userInput)) {
+                        if (!hashedRhymes.contains(userInput)) {
+                            if (words.get(index).getSingles().contains(userInput)) {
+                                crunchTheWord(1, userInput);
+                            } else if (words.get(index).getDoubles().contains(userInput)) {
+                                crunchTheWord(2, userInput);
+                            } else if (words.get(index).getTriples().contains(userInput)) {
+                                crunchTheWord(3, userInput);
+                            } else if (words.get(index).getQuadruples().contains(userInput)) {
+                                crunchTheWord(4, userInput);
+                            } else if (words.get(index).getQuintuples().contains(userInput)) {
+                                crunchTheWord(5, userInput);
+                            } else if (words.get(index).getSextuples().contains(userInput)) {
+                                crunchTheWord(6, userInput);
+                            } else if (words.get(index).getSeptuples().contains(userInput)) {
+                                crunchTheWord(7, userInput);
+                            } else if (words.get(index).getOctuples().contains(userInput)) {
+                                crunchTheWord(8, userInput);
+                            } else if (words.get(index).getNonuples().contains(userInput)) {
+                                crunchTheWord(9, userInput);
+                            } else if (words.get(index).getDecuples().contains(userInput)) {
+                                crunchTheWord(10, userInput);
+                            }
+                        } else {
+                            rhymeEntry.startAnimation(shake);
                         }
                     } else {
                         rhymeEntry.startAnimation(shake);
                     }
-                } else {
-                    rhymeEntry.startAnimation(shake);
+                } catch (Exception e) {
+                    Toast.makeText(GameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -281,8 +288,14 @@ public class GameActivity extends FragmentActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                generateNewWord();
-                rhymeGenerated.startAnimation(slideInRight);
+                try {
+                    generateNewWord();
+                    rhymeGenerated.startAnimation(slideInRight);
+                } catch (Exception e) {
+                    Toast.makeText(GameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    countdownTimer.cancel();
+                    onGameOver();
+                }
             }
 
             @Override
@@ -293,6 +306,7 @@ public class GameActivity extends FragmentActivity {
     }
 
     public void generateNewWord() {
+
         rhymeGenerated.setText(words.get(index).getWord());
         rhymeEntry.setText(null);
         setRandomCursorAnimation();
@@ -306,7 +320,7 @@ public class GameActivity extends FragmentActivity {
             }
         }
 
-        Log.d("Acceptable Rhymes", words.get(index).getSingles() + "" + words.get(index).getDoubles() + "");
+        //Log.d("Acceptable Rhymes", words.get(index).getSingles() + "" + words.get(index).getDoubles() + "");
     }
 
     private void runCountdownTimer() {
@@ -319,23 +333,27 @@ public class GameActivity extends FragmentActivity {
 
             @Override
             public void onFinish() {
-
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(250);
-
-                progressBar.setProgress(0);
-                progressBar.setVisibility(View.GONE);
-
-                scoreFragment = ScoreFragment.newInstance(score, index);
-                if (findViewById(R.id.game_over_container) != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_up, R.anim.scale_out)
-                            .add(R.id.game_over_container, scoreFragment)
-                            .commit();
-                }
+                onGameOver();
             }
         };
         countdownTimer.start();
+    }
+
+    // When the timer runs out or out of words
+    public void onGameOver() {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(250);
+
+        progressBar.setProgress(0);
+        progressBar.setVisibility(View.GONE);
+
+        scoreFragment = ScoreFragment.newInstance(score, index);
+        if (findViewById(R.id.game_over_container) != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_up, R.anim.scale_out)
+                    .add(R.id.game_over_container, scoreFragment)
+                    .commit();
+        }
     }
 
     // Generate a random animated drawable for the cursor
@@ -344,7 +362,7 @@ public class GameActivity extends FragmentActivity {
         int max = 2;
         Random random = new Random();
         int range = max - min + 1;
-        int randomNumber =  random.nextInt(range) + min;
+        int randomNumber = random.nextInt(range) + min;
         AnimationDrawable animation = new AnimationDrawable();
 
         switch (randomNumber) {
@@ -395,6 +413,16 @@ public class GameActivity extends FragmentActivity {
     }
 
     @Override
+    public void onStart() {
+        if (Defaults.getSignIntoGooglePlayGames(GameActivity.this)) {
+            getGameHelper().setConnectOnStart(true);
+        } else {
+            getGameHelper().setConnectOnStart(false);
+        }
+        super.onStart();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         closeKeyboard();
@@ -425,7 +453,7 @@ public class GameActivity extends FragmentActivity {
             score = 0;
             index = 0;
             words = new ArrayList<>();
-            words = MainActivity.words;
+            words = Defaults.getWordList(GameActivity.this);
             Collections.shuffle(words);
             hashedRhymes = new HashSet<>();
             generateNewWord();
@@ -437,4 +465,17 @@ public class GameActivity extends FragmentActivity {
         return false;
     }
 
+    @Override
+    public void onSignInFailed() {
+        //Toast.makeText(GameActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        //Toast.makeText(GameActivity.this, "onSignInSucceeded", Toast.LENGTH_SHORT).show();
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return getApiClient();
+    }
 }

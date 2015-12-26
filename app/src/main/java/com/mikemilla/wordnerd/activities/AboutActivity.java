@@ -1,35 +1,56 @@
 package com.mikemilla.wordnerd.activities;
 
-import android.app.Activity;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.google.example.games.basegameutils.BaseGameActivity;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends BaseGameActivity {
 
     TextView textView;
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        mGoogleApiClient = getApiClient();
+
         // Close Button
         textView = (TextView) findViewById(R.id.text_view);
         ImageButton closeButton = (ImageButton) findViewById(R.id.close_button);
-        closeButton.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        closeButton.setColorFilter(ContextCompat.getColor(AboutActivity.this, R.color.white));
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                    Games.signOut(mGoogleApiClient);
+                    Defaults.setSignIntoGooglePlayGames(false, AboutActivity.this);
+                }
                 onBackPressed();
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        if (Defaults.getSignIntoGooglePlayGames(AboutActivity.this)) {
+            getGameHelper().setConnectOnStart(true);
+        } else {
+            getGameHelper().setConnectOnStart(false);
+        }
+        super.onStart();
     }
 
     @Override
@@ -42,5 +63,15 @@ public class AboutActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
+    }
+
+    @Override
+    public void onSignInFailed() {
+        Log.e("About", "onSignInFailed");
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        Log.e("About", "onSignInSucceeded");
     }
 }
