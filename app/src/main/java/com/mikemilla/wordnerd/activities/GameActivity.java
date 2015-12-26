@@ -28,10 +28,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.example.games.basegameutils.BaseGameActivity;
-import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
-import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.data.Words;
+import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
 import com.mikemilla.wordnerd.views.EightBitNominalEditText;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
@@ -354,6 +354,15 @@ public class GameActivity extends BaseGameActivity {
                     .add(R.id.game_over_container, scoreFragment)
                     .commit();
         }
+
+        // Show the back button
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backButton.setVisibility(View.VISIBLE);
+                backButton.startAnimation(backButtonSlideInLeft);
+            }
+        }, 150);
     }
 
     // Generate a random animated drawable for the cursor

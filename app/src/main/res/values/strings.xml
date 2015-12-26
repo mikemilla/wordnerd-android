@@ -11,6 +11,11 @@
     <string name="achievement_dirty_thirty">CgkI0ceIo-cSEAIQBg</string>
     <string name="achievement_forty_shortie">CgkI0ceIo-cSEAIQBw</string>
 
+    <!-- Game Over -->
+    <string name="game_over">Game Over</string>
+    <string name="syllables">Syllables</string>
+    <string name="best">Best</string>
+
     <!-- Default Rhymes -->
     <string name="default_rhymes">
         {

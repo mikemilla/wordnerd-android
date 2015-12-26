@@ -1,31 +1,108 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red">
+    android:background="@color/white">
 
     <com.mikemilla.wordnerd.views.EightBitNominalTextView
-        android:id="@+id/score_text_view"
+        android:id="@+id/game_over_text"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="center" />
-
-    <com.mikemilla.wordnerd.views.EightBitNominalTextView
-        android:id="@+id/high_score_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_below="@+id/score_text_view"
-        android:gravity="center" />
+        android:layout_height="82dp"
+        android:gravity="center"
+        android:text="@string/game_over"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <View
-        android:id="@+id/dummy"
+        android:layout_width="32dp"
+        android:layout_height="3dp"
+        android:layout_below="@+id/game_over_text"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black26" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/top_score_area"
+            android:layout_width="236dp"
+            android:layout_height="56dp"
+            android:orientation="horizontal">
+
+            <com.mikemilla.wordnerd.views.EightBitNominalTextView
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:text="@string/syllables"
+                android:textColor="@color/black26"
+                android:textSize="18sp" />
+
+            <com.mikemilla.wordnerd.views.EightBitNominalTextView
+                android:id="@+id/score_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="236dp"
+            android:layout_height="56dp"
+            android:orientation="horizontal">
+
+            <com.mikemilla.wordnerd.views.EightBitNominalTextView
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:text="@string/best"
+                android:textColor="@color/black26"
+                android:textSize="18sp" />
+
+            <com.mikemilla.wordnerd.views.EightBitNominalTextView
+                android:id="@+id/high_score_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/blue" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/leaderboard"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        <View
+            android:id="@+id/button_achievements"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/red" />
+
+        <View
+            android:id="@+id/button_restart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/green" />
+
+        <View
+            android:id="@+id/button_leaderboards"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/purple" />
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -10,17 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.games.Games;
-import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class ScoreFragment extends Fragment {
 
     private static final int REQUEST_LEADERBOARD = 0;
+    private static final int REQUEST_ACHIEVEMENTS = 1;
     public static String SCORE_KEY = "score";
     public static String HIGH_SCORE_KEY = "high_score";
     public static String CURRENT_WORD_INDEX_KEY = "current_word_index";
@@ -83,19 +83,17 @@ public class ScoreFragment extends Fragment {
             Toast.makeText(gameActivity, "" + e, Toast.LENGTH_SHORT).show();
         }
 
-        View dummy = view.findViewById(R.id.dummy);
-        dummy.setOnClickListener(new View.OnClickListener() {
+        View restartButton = view.findViewById(R.id.button_restart);
+        restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gameActivity.onBackPressed();
-                gameActivity.backButton.setVisibility(View.VISIBLE);
-                gameActivity.backButton.startAnimation(gameActivity.backButtonSlideInLeft);
                 gameActivity.rhymeGenerated.startAnimation(gameActivity.slideInRight);
             }
         });
 
-        Button leaderboard = (Button) view.findViewById(R.id.leaderboard);
-        leaderboard.setOnClickListener(new View.OnClickListener() {
+        View leaderboardButton = view.findViewById(R.id.button_leaderboards);
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (gameActivity.getGoogleApiClient() != null) {
@@ -103,6 +101,21 @@ public class ScoreFragment extends Fragment {
                         startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
                                 gameActivity.getGoogleApiClient(),
                                 getString(R.string.leaderboard_high_scores)), REQUEST_LEADERBOARD);
+                    } else {
+                        showGooglePlayDialog();
+                    }
+                }
+            }
+        });
+
+        View achievementsButton = view.findViewById(R.id.button_achievements);
+        achievementsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gameActivity.getGoogleApiClient() != null) {
+                    if (gameActivity.getGoogleApiClient().isConnected()) {
+                        startActivityForResult(Games.Achievements.getAchievementsIntent(gameActivity.getGoogleApiClient()),
+                                REQUEST_ACHIEVEMENTS);
                     } else {
                         showGooglePlayDialog();
                     }

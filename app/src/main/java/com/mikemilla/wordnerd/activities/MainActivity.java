@@ -16,8 +16,8 @@ import android.widget.RelativeLayout;
 
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.google.gson.Gson;
-import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.data.Response;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 import com.squareup.okhttp.Callback;

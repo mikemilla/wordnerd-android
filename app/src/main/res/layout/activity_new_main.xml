@@ -22,7 +22,7 @@
         android:lineSpacingMultiplier="1.2"
         android:paddingBottom="56dp"
         android:textColor="@color/white"
-        android:textSize="44sp" />
+        android:textSize="52sp" />
 
     <com.mikemilla.wordnerd.views.EightBitNominalTextView
         android:id="@+id/start_game"
