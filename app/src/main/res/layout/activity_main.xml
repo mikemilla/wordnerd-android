@@ -1,102 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/fragment_container">
+    android:layout_height="match_parent">
 
-</FrameLayout>
+    <ImageButton
+        android:id="@+id/menu_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ripple"
+        android:scaleType="centerInside"
+        android:src="@drawable/menu" />
 
-    <!--
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_horizontal_margin"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background="#45bfe8">
-
-    <FrameLayout
-        android:id="@+id/rhyme_container"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="wordnerd"
-            android:textAllCaps="true"
-            android:textSize="35sp"
-            android:textColor="#171717"
-            android:textStyle="bold"
-            android:background="@drawable/nonactive_button"/>
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/bottom_container"
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/title_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:orientation="horizontal">
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
+        android:paddingBottom="56dp"
+        android:textColor="@color/white"
+        android:textSize="52sp" />
 
-        <Button
-            android:id="@+id/start_game"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="65dp"
-            android:gravity="center"
-            android:layout_gravity="bottom"
-            android:textSize="24sp"
-            android:textColor="#092129"
-            android:textStyle="bold"
-            android:text="play"
-            android:textAllCaps="true"
-            android:background="@drawable/button"/>
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/start_game"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/achievements"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="65dp"
-            android:gravity="center"
-            android:layout_gravity="bottom"
-            android:textSize="24sp"
-            android:textColor="#092129"
-            android:textStyle="bold"
-            android:text="Achieve"
-            android:textAllCaps="true"
-            android:background="@drawable/button"/>
-
-        <Button
-            android:id="@+id/leaderboards"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="65dp"
-            android:gravity="center"
-            android:layout_gravity="bottom"
-            android:textSize="24sp"
-            android:textColor="#092129"
-            android:textStyle="bold"
-            android:text="Lead"
-            android:textAllCaps="true"
-            android:background="@drawable/button"/>
-
-    </LinearLayout>
-
-</LinearLayout>
-
-    -->
+</RelativeLayout>

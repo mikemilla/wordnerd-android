@@ -50,29 +50,32 @@ public class GameActivity extends BaseGameActivity {
     ImageButton backButton;
     CountDownTimer countdownTimer;
     ProgressBar progressBar;
-    int progress;
     Boolean isKeyboardOpen = false;
     Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
     ImageView cursorView;
     AnimationDrawable animationA, animationB, animationC;
-    GoogleApiClient mGoogleApiClient;
+    int progress;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
     HashSet<String> hashedRhymes = new HashSet<>();
     int index = 0;
     int score;
+    int colorIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game2);
+        setContentView(R.layout.activity_game);
 
         words = Defaults.getWordList(GameActivity.this);
         Collections.shuffle(words);
 
         // Keyboard / Full screen Bug Fix
         fixFullscreenKeyboardBug(this);
+
+        // Set background color
+        findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
 
         // Check keyboard status
         final View rootView = getWindow().getDecorView().findViewById(R.id.main);
@@ -84,18 +87,12 @@ public class GameActivity extends BaseGameActivity {
                 android.util.Log.d("isKeyboardOpen", "" + isKeyboardOpen);
 
                 if (isKeyboardOpen) {
-                    findViewById(R.id.main).setBackgroundColor(
-                            ContextCompat.getColor(GameActivity.this, R.color.blue));
+                    Log.d("Keyboard", "Openned");
                 } else {
-                    findViewById(R.id.main).setBackgroundColor(
-                            ContextCompat.getColor(GameActivity.this, R.color.green));
+                    Log.d("Keyboard", "Closed");
                 }
             }
         });
-
-        // Main Content Area
-        RelativeLayout main = (RelativeLayout) findViewById(R.id.main);
-        main.setBackgroundColor(ContextCompat.getColor(this, R.color.blue));
 
         // Game Content Area
         RelativeLayout game = (RelativeLayout) findViewById(R.id.game);
@@ -393,6 +390,24 @@ public class GameActivity extends BaseGameActivity {
         animation.start();
     }
 
+    public int changeBackgroundColor() {
+
+        // Get Color from array
+        int[] colors = {
+                R.color.green,
+                R.color.deep_purple,
+                R.color.red,
+                R.color.amber
+        };
+
+        try {
+            return ContextCompat.getColor(GameActivity.this, colors[colorIndex]);
+        } catch (Exception e) {
+            colorIndex = 0;
+            return ContextCompat.getColor(GameActivity.this, colors[colorIndex]);
+        }
+    }
+
     public void fixFullscreenKeyboardBug(final Activity activity) {
 
         // Turn off Fullscreen mode
@@ -453,6 +468,11 @@ public class GameActivity extends BaseGameActivity {
             this.finish();
             overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
         } else {
+
+            // Change Background color
+            colorIndex += 1;
+            findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
+
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.scale_in, R.anim.slide_out_down)
                     .remove(scoreFragment)

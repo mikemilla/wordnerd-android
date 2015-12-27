@@ -13,7 +13,7 @@
 
     <!-- Game Over -->
     <string name="game_over">Game Over</string>
-    <string name="syllables">Syllables</string>
+    <string name="syllables">Score</string>
     <string name="best">Best</string>
 
     <!-- Default Rhymes -->

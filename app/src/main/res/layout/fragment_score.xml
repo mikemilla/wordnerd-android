@@ -17,13 +17,14 @@
         android:layout_height="3dp"
         android:layout_below="@+id/game_over_text"
         android:layout_centerHorizontal="true"
-        android:background="@color/black26" />
+        android:background="@color/black10" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:id="@+id/top_score_area"
@@ -78,30 +79,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="88dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <View
+        <ImageView
             android:id="@+id/button_achievements"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:background="@color/red" />
+            android:background="@drawable/button_google_play_games"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_cast_light" />
 
-        <View
+        <ImageView
             android:id="@+id/button_restart"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/green" />
+            android:background="@drawable/button_restart_2"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_play_arrow_white_48dp" />
 
-        <View
+        <ImageView
             android:id="@+id/button_leaderboards"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:background="@color/purple" />
+            android:background="@drawable/button_google_play_games"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_cast_light" />
 
     </LinearLayout>
 

@@ -36,7 +36,7 @@ public class MainActivity extends BaseGameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_main);
+        setContentView(R.layout.activity_main);
 
         try {
             run();
@@ -54,7 +54,7 @@ public class MainActivity extends BaseGameActivity {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
                 if (okFailed) {
                     try {
                         run();

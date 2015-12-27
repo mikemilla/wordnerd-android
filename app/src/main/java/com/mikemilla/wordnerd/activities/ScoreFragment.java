@@ -2,14 +2,18 @@ package com.mikemilla.wordnerd.activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.games.Games;
@@ -83,7 +87,12 @@ public class ScoreFragment extends Fragment {
             Toast.makeText(gameActivity, "" + e, Toast.LENGTH_SHORT).show();
         }
 
-        View restartButton = view.findViewById(R.id.button_restart);
+        ImageView restartButton = (ImageView) view.findViewById(R.id.button_restart);
+
+        // Change drawable button background
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            restartButton.setBackground(changeButtonDrawable());
+        }
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +101,7 @@ public class ScoreFragment extends Fragment {
             }
         });
 
-        View leaderboardButton = view.findViewById(R.id.button_leaderboards);
+        ImageView leaderboardButton = (ImageView) view.findViewById(R.id.button_leaderboards);
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +117,7 @@ public class ScoreFragment extends Fragment {
             }
         });
 
-        View achievementsButton = view.findViewById(R.id.button_achievements);
+        ImageView achievementsButton = (ImageView) view.findViewById(R.id.button_achievements);
         achievementsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +133,21 @@ public class ScoreFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private Drawable changeButtonDrawable() {
+        int[] drawables = {
+                R.drawable.button_restart_0,
+                R.drawable.button_restart_1,
+                R.drawable.button_restart_2,
+                R.drawable.button_restart_3
+        };
+
+        try {
+            return ContextCompat.getDrawable(gameActivity, drawables[gameActivity.colorIndex]);
+        } catch (Exception e) {
+            return ContextCompat.getDrawable(gameActivity, drawables[0]);
+        }
     }
 
     public void showGooglePlayDialog() {
