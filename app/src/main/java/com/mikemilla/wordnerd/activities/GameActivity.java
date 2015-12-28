@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -19,11 +20,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -115,6 +118,7 @@ public class GameActivity extends BaseGameActivity {
 
         // Back Button
         backButton = (ImageButton) findViewById(R.id.back_button);
+        backButton.setColorFilter(ContextCompat.getColor(GameActivity.this, R.color.white));
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +132,20 @@ public class GameActivity extends BaseGameActivity {
 
         // Rhyme entry area and text change listener
         rhymeEntry = (EightBitNominalEditText) findViewById(R.id.rhyme_entry);
+
+        // IME Action
+        rhymeEntry.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_PREVIOUS) {
+                    rhymeEntry.setText(null);
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         rhymeEntry.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -473,6 +491,10 @@ public class GameActivity extends BaseGameActivity {
             colorIndex += 1;
             findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
 
+            // Change Back Button Color
+            backButton.setColorFilter(ContextCompat.getColor(GameActivity.this, R.color.white));
+
+            // Remove Fragment
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.scale_in, R.anim.slide_out_down)
                     .remove(scoreFragment)

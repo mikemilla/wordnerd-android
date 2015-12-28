@@ -87,6 +87,9 @@ public class ScoreFragment extends Fragment {
             Toast.makeText(gameActivity, "" + e, Toast.LENGTH_SHORT).show();
         }
 
+        // Tint Back Button Color
+        gameActivity.backButton.setColorFilter(ContextCompat.getColor(gameActivity, R.color.black));
+
         ImageView restartButton = (ImageView) view.findViewById(R.id.button_restart);
 
         // Change drawable button background

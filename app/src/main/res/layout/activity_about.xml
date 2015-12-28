@@ -12,12 +12,12 @@
 
     <ImageButton
         android:id="@+id/close_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/ripple"
+        android:background="@drawable/button_main_menu"
         android:scaleType="centerInside"
         android:src="@drawable/close" />
 

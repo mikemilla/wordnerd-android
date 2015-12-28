@@ -78,7 +78,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginTop="10dp"
-        android:background="@color/white26"
+        android:background="@drawable/button_exit_game"
         android:src="@drawable/close" />
 
 </RelativeLayout>

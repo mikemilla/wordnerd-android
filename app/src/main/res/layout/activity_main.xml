@@ -5,11 +5,11 @@
 
     <ImageButton
         android:id="@+id/menu_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/ripple"
+        android:background="@drawable/button_main_menu"
         android:scaleType="centerInside"
         android:src="@drawable/menu" />
 
@@ -27,12 +27,12 @@
     <com.mikemilla.wordnerd.views.EightBitNominalTextView
         android:id="@+id/start_game"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="32dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/button_main_menu"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="14sp" />
