@@ -111,7 +111,7 @@
             android:layout_weight="1"
             android:background="@drawable/button_google_play_games"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_cast_light" />
+            android:src="@drawable/icon_leaderboard" />
 
     </LinearLayout>
 
