@@ -105,6 +105,7 @@ public class ScoreFragment extends Fragment {
         });
 
         ImageView leaderboardButton = (ImageView) view.findViewById(R.id.button_leaderboards);
+        //leaderboardButton.setColorFilter(ContextCompat.getColor(gameActivity, R.color.black));
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +122,7 @@ public class ScoreFragment extends Fragment {
         });
 
         ImageView achievementsButton = (ImageView) view.findViewById(R.id.button_achievements);
+        //achievementsButton.setColorFilter(ContextCompat.getColor(gameActivity, R.color.black));
         achievementsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
