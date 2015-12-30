@@ -51,4 +51,5 @@
     ]
 }
     </string>
+    <string name="title_activity_fresh_game">FreshGameActivity</string>
 </resources>

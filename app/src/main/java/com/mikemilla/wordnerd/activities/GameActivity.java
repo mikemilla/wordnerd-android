@@ -1,7 +1,6 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -25,7 +23,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,10 +72,18 @@ public class GameActivity extends BaseGameActivity {
         Collections.shuffle(words);
 
         // Keyboard / Full screen Bug Fix
-        fixFullscreenKeyboardBug(this);
+        AndroidBug5497Workaround.assistActivity(this);
 
         // Set background color
         findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
+        findViewById(R.id.main).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isKeyboardOpen) {
+                    openKeyboard();
+                }
+            }
+        });
 
         // Check keyboard status
         final View rootView = getWindow().getDecorView().findViewById(R.id.main);
@@ -90,20 +95,11 @@ public class GameActivity extends BaseGameActivity {
                 android.util.Log.d("isKeyboardOpen", "" + isKeyboardOpen);
 
                 if (isKeyboardOpen) {
-                    Log.d("Keyboard", "Openned");
+                    Log.d("Keyboard", "Opened");
+                    rhymeEntry.setTextSize(32); // Fixes Bug
                 } else {
                     Log.d("Keyboard", "Closed");
-                }
-            }
-        });
-
-        // Game Content Area
-        RelativeLayout game = (RelativeLayout) findViewById(R.id.game);
-        game.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isKeyboardOpen) {
-                    openKeyboard();
+                    rhymeEntry.setTextSize(0); // Fixes Bug
                 }
             }
         });
@@ -424,23 +420,6 @@ public class GameActivity extends BaseGameActivity {
             colorIndex = 0;
             return ContextCompat.getColor(GameActivity.this, colors[colorIndex]);
         }
-    }
-
-    public void fixFullscreenKeyboardBug(final Activity activity) {
-
-        // Turn off Fullscreen mode
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // Turn on Fullscreen mode
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                AndroidBug5497Workaround.assistActivity(activity);
-            }
-        }, 100);
     }
 
     public void openKeyboard() {

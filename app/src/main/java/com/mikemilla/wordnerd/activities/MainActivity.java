@@ -54,7 +54,6 @@ public class MainActivity extends BaseGameActivity {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (okFailed) {
                     try {
                         run();

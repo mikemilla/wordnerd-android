@@ -6,17 +6,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
-import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.Defaults;
+import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
 
 public class AboutActivity extends BaseGameActivity {
 
-    TextView textView;
     GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -27,7 +26,6 @@ public class AboutActivity extends BaseGameActivity {
         mGoogleApiClient = getApiClient();
 
         // Close Button
-        textView = (TextView) findViewById(R.id.text_view);
         ImageButton closeButton = (ImageButton) findViewById(R.id.close_button);
         closeButton.setColorFilter(ContextCompat.getColor(AboutActivity.this, R.color.white));
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +38,8 @@ public class AboutActivity extends BaseGameActivity {
                 onBackPressed();
             }
         });
+
+        AndroidBug5497Workaround.assistActivity(this);
 
     }
 

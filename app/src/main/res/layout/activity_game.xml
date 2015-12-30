@@ -3,70 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/game"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="10dp"
+        android:max="4000"
+        android:progress="4000"
+        android:progressDrawable="@drawable/progress_bar" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:max="4000"
-            android:progress="4000"
-            android:progressDrawable="@drawable/progress_bar" />
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginTop="10dp"
+        android:padding="25dp"
+        android:textSize="25sp" />
 
-        <com.mikemilla.wordnerd.views.EightBitNominalTextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginTop="10dp"
-            android:padding="25dp"
-            android:textSize="25sp" />
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/rhyme_generated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:paddingBottom="72dp"
+        android:textColor="#ffffff"
+        android:textSize="38sp" />
 
-        <com.mikemilla.wordnerd.views.EightBitNominalTextView
-            android:id="@+id/rhyme_generated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:paddingBottom="72dp"
-            android:textColor="#ffffff"
-            android:textSize="38sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white" />
+    <com.mikemilla.wordnerd.views.EightBitNominalEditText
+        android:id="@+id/rhyme_entry"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:cursorVisible="false" />
 
-        <com.mikemilla.wordnerd.views.EightBitNominalEditText
-            android:id="@+id/rhyme_entry"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:cursorVisible="false"
-            android:gravity="center"
-            android:imeOptions="actionPrevious"
-            android:inputType="textAutoCorrect"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textSize="32sp" />
-
-        <ImageView
-            android:id="@+id/cursor_animation_view"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerInside" />
-
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/cursor_animation_view"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside" />
 
     <FrameLayout
         android:id="@+id/game_over_container"
