@@ -2,6 +2,7 @@
 <resources>
     <!-- App Name -->
     <string name="app_name">wordnerd</string>
+    <string name="keyboard">Tap to open keyboard</string>
 
     <!-- Google Play Games  -->
     <string name="leaderboard_high_scores">CgkI0ceIo-cSEAIQAg</string>
@@ -51,5 +52,4 @@
     ]
 }
     </string>
-    <string name="title_activity_fresh_game">FreshGameActivity</string>
 </resources>

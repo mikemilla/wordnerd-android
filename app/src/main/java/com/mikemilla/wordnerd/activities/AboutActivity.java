@@ -12,7 +12,6 @@ import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
-import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
 
 public class AboutActivity extends BaseGameActivity {
 
@@ -38,8 +37,6 @@ public class AboutActivity extends BaseGameActivity {
                 onBackPressed();
             }
         });
-
-        AndroidBug5497Workaround.assistActivity(this);
 
     }
 

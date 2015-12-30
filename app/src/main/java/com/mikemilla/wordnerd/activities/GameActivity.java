@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import java.util.Random;
 public class GameActivity extends BaseGameActivity {
 
     // User Interface
+    RelativeLayout openKeyboardView;
     ScoreFragment scoreFragment;
     EightBitNominalTextView scoreTextView;
     EightBitNominalEditText rhymeEntry;
@@ -76,7 +78,10 @@ public class GameActivity extends BaseGameActivity {
 
         // Set background color
         findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
-        findViewById(R.id.main).setOnClickListener(new View.OnClickListener() {
+
+        // Open Keyboard View
+        openKeyboardView = (RelativeLayout) findViewById(R.id.open_keyboard_view);
+        openKeyboardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isKeyboardOpen) {
@@ -89,17 +94,26 @@ public class GameActivity extends BaseGameActivity {
         final View rootView = getWindow().getDecorView().findViewById(R.id.main);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
+
                 int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
                 isKeyboardOpen = heightDiff >= 150;
-                android.util.Log.d("heightDiff", "" + heightDiff);
-                android.util.Log.d("isKeyboardOpen", "" + isKeyboardOpen);
+
+                //Log.d("heightDiff", "" + heightDiff);
+                //Log.d("isKeyboardOpen", "" + isKeyboardOpen);
 
                 if (isKeyboardOpen) {
                     Log.d("Keyboard", "Opened");
                     rhymeEntry.setTextSize(32); // Fixes Bug
+                    openKeyboardView.setVisibility(View.GONE);
                 } else {
                     Log.d("Keyboard", "Closed");
                     rhymeEntry.setTextSize(0); // Fixes Bug
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            openKeyboardView.setVisibility(View.VISIBLE);
+                        }
+                    }, 150);
                 }
             }
         });
@@ -118,6 +132,7 @@ public class GameActivity extends BaseGameActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard();
                 GameActivity.this.finish();
                 overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
             }
@@ -446,7 +461,7 @@ public class GameActivity extends BaseGameActivity {
     @Override
     public void onPause() {
         super.onPause();
-        closeKeyboard();
+        //closeKeyboard();
     }
 
     @Override
@@ -460,7 +475,9 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public void onBackPressed() {
-        if (scoreFragment == null || !scoreFragment.isAdded()) {
+
+        if (openKeyboardView.getVisibility() == View.VISIBLE
+                || scoreFragment == null || !scoreFragment.isAdded()) {
             super.onBackPressed();
             this.finish();
             overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
