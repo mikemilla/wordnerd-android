@@ -120,7 +120,6 @@ public class ScoreFragment extends Fragment {
         });
 
         ImageView achievementsButton = (ImageView) view.findViewById(R.id.button_achievements);
-        //achievementsButton.setColorFilter(ContextCompat.getColor(gameActivity, R.color.black));
         achievementsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,23 +153,6 @@ public class ScoreFragment extends Fragment {
     }
 
     public void showGooglePlayDialog() {
-        /*
-        new AlertDialog.Builder(gameActivity)
-                .setTitle("Sign into Google Play Games?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Defaults.setSignIntoGooglePlayGames(true, gameActivity);
-                        gameActivity.getGameHelper().beginUserInitiatedSignIn();
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Defaults.setSignIntoGooglePlayGames(false, gameActivity);
-                    }
-                })
-                .show();
-                */
-
         gamesFragment = GooglePlayGamesFragment.newInstance(gameActivity);
         gameActivity.gamesFragment = gamesFragment;
         if (gameActivity.findViewById(R.id.google_play_games_frame) != null) {

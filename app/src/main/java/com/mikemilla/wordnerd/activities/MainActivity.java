@@ -236,7 +236,6 @@ public class MainActivity extends BaseGameActivity {
     }
 
     public void showGooglePlayDialog() {
-
         gamesFragment = GooglePlayGamesFragment.newInstance(this);
         if (findViewById(R.id.google_play_games_frame) != null) {
             getSupportFragmentManager().beginTransaction()
@@ -244,23 +243,6 @@ public class MainActivity extends BaseGameActivity {
                     .add(R.id.google_play_games_frame, gamesFragment)
                     .commit();
         }
-
-        /*
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Sign into Google Play Games?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Defaults.setSignIntoGooglePlayGames(true, MainActivity.this);
-                        getGameHelper().beginUserInitiatedSignIn();
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Defaults.setSignIntoGooglePlayGames(false, MainActivity.this);
-                    }
-                })
-                .show();
-                */
     }
 
     /**

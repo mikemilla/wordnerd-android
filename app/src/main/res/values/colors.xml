@@ -4,16 +4,18 @@
     <color name="deep_purple">#673AB7</color>
     <color name="blue">#2196F3</color>
     <color name="green">#00C05F</color>
+    <color name="green_dark">#099C52</color>
     <color name="amber">#FFB007</color>
 
     <color name="grey_light">#616161</color>
     <color name="grey_dark">#424242</color>
+    <color name="grey_icon">#666666</color>
 
     <color name="white">#ffffff</color>
     <color name="black5">#0D000000</color>
     <color name="black10">#1A000000</color>
     <color name="black26">#42000000</color>
-    <color name="black60">#99000000</color>
+    <color name="black_background">#E6000000</color>
     <color name="white10">#1AFFFFFF</color>
     <color name="black">#000000</color>
 
