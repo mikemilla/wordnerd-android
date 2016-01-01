@@ -2,13 +2,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black60">
+    android:background="@color/black60"
+    android:clickable="true">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@color/white"
-        android:text="@string/hello_blank_fragment" />
+        android:clickable="true"
+        android:minWidth="200dp">
+
+        <com.mikemilla.wordnerd.views.EightBitNominalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:text="Something" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

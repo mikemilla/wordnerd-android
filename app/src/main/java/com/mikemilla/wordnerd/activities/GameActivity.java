@@ -483,17 +483,18 @@ public class GameActivity extends BaseGameActivity {
     @Override
     public void onBackPressed() {
 
+        if (gamesFragment != null && gamesFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .remove(gamesFragment)
+                    .commit();
+            return;
+        }
+
         if (openKeyboardView.getVisibility() == View.VISIBLE) {
-            if (gamesFragment != null && gamesFragment.isAdded()) {
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .remove(gamesFragment)
-                        .commit();
-            } else {
-                super.onBackPressed();
-                this.finish();
-                overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
-            }
+            super.onBackPressed();
+            this.finish();
+            overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
         } else {
 
             // Change Background color
