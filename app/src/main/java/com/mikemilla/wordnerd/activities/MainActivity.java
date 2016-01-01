@@ -228,7 +228,7 @@ public class MainActivity extends BaseGameActivity {
             super.onBackPressed();
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.scale_in, R.anim.slide_out_down)
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .remove(gamesFragment)
                     .commit();
         }

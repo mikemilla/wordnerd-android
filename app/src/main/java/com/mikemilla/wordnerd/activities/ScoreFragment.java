@@ -62,7 +62,12 @@ public class ScoreFragment extends Fragment {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt(HIGH_SCORE_KEY, lastScore);
             editor.apply();
-            Toast.makeText(gameActivity, "New Best Score", Toast.LENGTH_SHORT).show();
+
+            // Change Colors and text
+            EightBitNominalTextView scoreText = (EightBitNominalTextView) view.findViewById(R.id.high_score_static_text_view);
+            scoreText.setText(R.string.new_best);
+            scoreText.setTextColor(ContextCompat.getColor(gameActivity, R.color.blue));
+            highScoreTextView.setTextColor(ContextCompat.getColor(gameActivity, R.color.blue));
             highScoreTextView.setText(String.valueOf(lastScore));
 
             // Set new high score on Google Play Games
