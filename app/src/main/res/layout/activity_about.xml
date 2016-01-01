@@ -2,17 +2,89 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red">
+    android:background="@color/grey_dark">
+
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_exit_game"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.4"
+        android:padding="32dp"
+        android:text="@string/created_by"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:layout_below="@+id/close_button" />
+
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_below="@+id/close_button"
+        android:gravity="center"
+        android:text="@string/tips"
+        android:textColor="@color/white"
+        android:textSize="32sp" />
+
+    <LinearLayout
+        android:id="@+id/pagination"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_above="@+id/footer"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_margin="4dp"
+            android:background="@color/white" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_margin="4dp"
+            android:alpha="0.1"
+            android:background="@color/white" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_margin="4dp"
+            android:alpha="0.1"
+            android:background="@color/white" />
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/close_button"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/button_main_menu"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_exit_game"
         android:scaleType="centerInside"
         android:src="@drawable/close" />
+
+    <com.mikemilla.wordnerd.views.EightBitNominalTextView
+        android:id="@+id/sign_out_google_play"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_google_play_sign_in"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/sign_out"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </RelativeLayout>
