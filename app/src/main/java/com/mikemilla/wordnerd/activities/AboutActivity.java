@@ -60,9 +60,9 @@ public class AboutActivity extends BaseGameActivity {
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         Adapter adapter = new Adapter(getSupportFragmentManager(), getApplicationContext());
-        adapter.addFragment(PageFragment.newInstance("You can play half rhymes and words that almost rhyme"));
+        adapter.addFragment(PageFragment.newInstance("Rhymes don't have to be exact!"));
+        adapter.addFragment(PageFragment.newInstance("Score is the amount of syllables you played"));
         adapter.addFragment(PageFragment.newInstance("Swear words are acceptable ;)"));
-        adapter.addFragment(PageFragment.newInstance("Something also that's nice"));
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
