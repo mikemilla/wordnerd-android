@@ -46,6 +46,7 @@ public class GameActivity extends BaseGameActivity {
     // User Interface
     RelativeLayout openKeyboardView;
     ScoreFragment scoreFragment;
+    GooglePlayGamesFragment gamesFragment;
     EightBitNominalTextView scoreTextView;
     EightBitNominalEditText rhymeEntry;
     EightBitNominalTextView rhymeGenerated;
@@ -53,6 +54,7 @@ public class GameActivity extends BaseGameActivity {
     CountDownTimer countdownTimer;
     ProgressBar progressBar;
     Boolean isKeyboardOpen = false;
+    boolean canShowKeyboardView = false;
     Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
     ImageView cursorView;
     AnimationDrawable animationA, animationB, animationC;
@@ -78,6 +80,14 @@ public class GameActivity extends BaseGameActivity {
 
         // Set background color
         findViewById(R.id.main).setBackgroundColor(changeBackgroundColor());
+
+        // Fixes keyboard glitches
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               canShowKeyboardView = true;
+            }
+        }, 1000);
 
         // Open Keyboard View
         openKeyboardView = (RelativeLayout) findViewById(R.id.open_keyboard_view);
@@ -108,12 +118,9 @@ public class GameActivity extends BaseGameActivity {
                 } else {
                     Log.d("Keyboard", "Closed");
                     rhymeEntry.setTextSize(0); // Fixes Bug
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            openKeyboardView.setVisibility(View.VISIBLE);
-                        }
-                    }, 150);
+                    if (canShowKeyboardView) {
+                        openKeyboardView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -476,11 +483,17 @@ public class GameActivity extends BaseGameActivity {
     @Override
     public void onBackPressed() {
 
-        if (openKeyboardView.getVisibility() == View.VISIBLE
-                || scoreFragment == null || !scoreFragment.isAdded()) {
-            super.onBackPressed();
-            this.finish();
-            overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
+        if (openKeyboardView.getVisibility() == View.VISIBLE) {
+            if (gamesFragment != null && gamesFragment.isAdded()) {
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .remove(gamesFragment)
+                        .commit();
+            } else {
+                super.onBackPressed();
+                this.finish();
+                overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
+            }
         } else {
 
             // Change Background color

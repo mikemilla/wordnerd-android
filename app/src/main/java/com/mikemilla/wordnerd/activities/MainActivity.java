@@ -1,11 +1,9 @@
 package com.mikemilla.wordnerd.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -30,6 +28,7 @@ public class MainActivity extends BaseGameActivity {
 
     private EightBitNominalTextView mStartGameButton;
     private Animation fadeIn, fadeOut;
+    private GooglePlayGamesFragment gamesFragment;
     boolean okFailed = false;
     OkHttpClient ok = new OkHttpClient();
 
@@ -222,7 +221,31 @@ public class MainActivity extends BaseGameActivity {
         super.onStart();
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (gamesFragment == null || !gamesFragment.isAdded()) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.scale_in, R.anim.slide_out_down)
+                    .remove(gamesFragment)
+                    .commit();
+        }
+
+    }
+
     public void showGooglePlayDialog() {
+
+        gamesFragment = GooglePlayGamesFragment.newInstance(this);
+        if (findViewById(R.id.google_play_games_frame) != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .add(R.id.google_play_games_frame, gamesFragment)
+                    .commit();
+        }
+
+        /*
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Sign into Google Play Games?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -237,6 +260,7 @@ public class MainActivity extends BaseGameActivity {
                     }
                 })
                 .show();
+                */
     }
 
     /**

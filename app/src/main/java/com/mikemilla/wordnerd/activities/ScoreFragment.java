@@ -1,6 +1,5 @@
 package com.mikemilla.wordnerd.activities;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +16,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.games.Games;
 import com.mikemilla.wordnerd.R;
-import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class ScoreFragment extends Fragment {
 
+    private GooglePlayGamesFragment gamesFragment;
     private static final int REQUEST_LEADERBOARD = 0;
     private static final int REQUEST_ACHIEVEMENTS = 1;
     public static String SCORE_KEY = "score";
@@ -156,6 +154,7 @@ public class ScoreFragment extends Fragment {
     }
 
     public void showGooglePlayDialog() {
+        /*
         new AlertDialog.Builder(gameActivity)
                 .setTitle("Sign into Google Play Games?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -170,6 +169,16 @@ public class ScoreFragment extends Fragment {
                     }
                 })
                 .show();
+                */
+
+        gamesFragment = GooglePlayGamesFragment.newInstance(gameActivity);
+        gameActivity.gamesFragment = gamesFragment;
+        if (gameActivity.findViewById(R.id.google_play_games_frame) != null) {
+            gameActivity.getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .add(R.id.google_play_games_frame, gamesFragment)
+                    .commit();
+        }
     }
 
     public static ScoreFragment newInstance(int score, int currentIndex) {

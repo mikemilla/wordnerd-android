@@ -91,4 +91,9 @@
 
     </RelativeLayout>
 
+    <FrameLayout
+        android:id="@+id/google_play_games_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
