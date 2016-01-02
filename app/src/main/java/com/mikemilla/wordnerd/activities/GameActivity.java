@@ -2,11 +2,13 @@ package com.mikemilla.wordnerd.activities;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
@@ -85,7 +88,7 @@ public class GameActivity extends BaseGameActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-               canShowKeyboardView = true;
+                canShowKeyboardView = true;
             }
         }, 1000);
 
@@ -198,6 +201,13 @@ public class GameActivity extends BaseGameActivity {
                 // Engine
                 try {
                     String userInput = s.toString().toLowerCase();
+
+                    // Catch Duplicates
+                    if (hashedRhymes.contains(userInput)) {
+                        rhymeEntry.startAnimation(shake);
+                        return;
+                    }
+
                     if (!rhymeGenerated.getText().toString().equals(userInput)) {
                         if (!hashedRhymes.contains(userInput)) {
                             if (words.get(index).getSingles().contains(userInput)) {
@@ -221,8 +231,6 @@ public class GameActivity extends BaseGameActivity {
                             } else if (words.get(index).getDecuples().contains(userInput)) {
                                 crunchTheWord(10, userInput);
                             }
-                        } else {
-                            rhymeEntry.startAnimation(shake);
                         }
                     } else {
                         rhymeEntry.startAnimation(shake);
@@ -533,7 +541,11 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public void onSignInSucceeded() {
-        //Toast.makeText(GameActivity.this, "onSignInSucceeded", Toast.LENGTH_SHORT).show();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (getGoogleApiClient() != null && getGoogleApiClient().isConnected()) {
+            Games.Leaderboards.submitScore(getGoogleApiClient(),
+                    getString(R.string.leaderboard_high_scores), preferences.getInt(ScoreFragment.HIGH_SCORE_KEY, 0));
+        }
     }
 
     public GoogleApiClient getGoogleApiClient() {

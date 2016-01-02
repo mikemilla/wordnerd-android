@@ -42,21 +42,21 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
             android:layout_margin="4dp"
             android:background="@color/white" />
 
         <View
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
             android:layout_margin="4dp"
             android:alpha="0.1"
             android:background="@color/white" />
 
         <View
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
             android:layout_margin="4dp"
             android:alpha="0.1"
             android:background="@color/white" />
