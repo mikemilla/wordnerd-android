@@ -5,8 +5,9 @@ import android.content.SharedPreferences;
 
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.google.gson.Gson;
-import com.mikemilla.wordnerd.R;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import bz.tsung.android.objectify.NoSuchPreferenceFoundException;
@@ -31,9 +32,25 @@ public class Defaults {
         } catch (NoSuchPreferenceFoundException e) {
             e.printStackTrace();
             Gson gson = new Gson();
-            responseObj = gson.fromJson(activity.getResources().getString(R.string.default_rhymes), Response.class);
+            responseObj = gson.fromJson(loadJSONFromAsset(activity), Response.class);
         }
         return createRhymeLists(responseObj);
+    }
+
+    public static String loadJSONFromAsset(BaseGameActivity activity) {
+        String json;
+        try {
+            InputStream is = activity.getResources().getAssets().open("json/words.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     private static ArrayList<Words> createRhymeLists(Response responseObj) {

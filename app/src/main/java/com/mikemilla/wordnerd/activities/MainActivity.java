@@ -89,6 +89,8 @@ public class MainActivity extends BaseGameActivity {
 
         // Start the Animation Loop
         animateTapToPlay();
+
+
     }
 
     public void run() throws Exception {
