@@ -193,6 +193,9 @@ public class ScoreFragment extends Fragment {
         if (score >= 40) {
             Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_forty_shortie)); // Forty Points
         }
+        if (score >= 50) {
+            Games.Achievements.unlock(gameActivity.getGoogleApiClient(), getString(R.string.achievement_nifty_fifty)); // Fifty Points
+        }
     }
 
 }
