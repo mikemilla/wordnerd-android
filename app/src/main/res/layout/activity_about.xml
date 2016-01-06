@@ -28,10 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_below="@+id/close_button"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/tips"
         android:textColor="@color/white"
-        android:textSize="32sp" />
+        android:textSize="28sp" />
 
     <LinearLayout
         android:id="@+id/pagination"
@@ -74,17 +75,17 @@
 
     <com.mikemilla.wordnerd.views.EightBitNominalTextView
         android:id="@+id/sign_out_google_play"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
         android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_google_play_sign_in"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/close_button"
+        android:background="@drawable/button_exit_game"
         android:gravity="center"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:text="@string/sign_out"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:visibility="gone" />
 
 </RelativeLayout>
