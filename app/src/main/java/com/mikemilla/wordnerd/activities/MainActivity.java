@@ -26,11 +26,12 @@ import java.io.IOException;
 
 public class MainActivity extends BaseGameActivity {
 
-    private EightBitNominalTextView mStartGameButton;
-    private Animation fadeIn, fadeOut;
-    private GooglePlayGamesFragment gamesFragment;
+    Animation slideOutLeftWord, slideOutLeftNerd, slideInRight;
+    GooglePlayGamesFragment gamesFragment;
     boolean okFailed = false;
+    boolean didCreateAnimation = false;
     OkHttpClient ok = new OkHttpClient();
+    EightBitNominalTextView titleWord, titleNerd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +69,7 @@ public class MainActivity extends BaseGameActivity {
         });
 
         // Set Title Text
-        EightBitNominalTextView title = (EightBitNominalTextView) findViewById(R.id.title_text);
-        title.setText("Word\nNerd");
-
-        // Set Title Text
-        mStartGameButton = (EightBitNominalTextView) findViewById(R.id.start_game);
-        mStartGameButton.setText("Tap here to play");
+        ImageButton mStartGameButton = (ImageButton) findViewById(R.id.start_game);
         mStartGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,14 +79,96 @@ public class MainActivity extends BaseGameActivity {
             }
         });
 
-        // Add Animations
-        fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        // Set Title Text
+        titleWord = (EightBitNominalTextView) findViewById(R.id.title_word);
+        titleNerd = (EightBitNominalTextView) findViewById(R.id.title_nerd);
 
-        // Start the Animation Loop
-        animateTapToPlay();
+        // Create animations
+        slideOutLeftWord = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        slideOutLeftNerd = AnimationUtils.loadAnimation(this, R.anim.slide_out_left);
+        slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right);
 
+        if (!didCreateAnimation) {
+            didCreateAnimation = true;
+            titleWord.setText("Word");
+            titleNerd.setText("Nerd");
+            runOpeningAnimation();
+        }
+    }
 
+    public void runOpeningAnimation() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                titleWord.startAnimation(slideOutLeftWord);
+                titleNerd.startAnimation(slideOutLeftNerd);
+            }
+        }, 4000);
+
+        slideOutLeftWord.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                titleWord.startAnimation(slideInRight);
+                titleNerd.setText(null);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        slideInRight.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        titleNerd.setText("N");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                titleNerd.setText("Ne");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        titleNerd.setText("Ner");
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                titleNerd.setText("Nerd");
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        titleWord.startAnimation(slideOutLeftWord);
+                                                        titleNerd.startAnimation(slideOutLeftNerd);
+                                                    }
+                                                }, 4000);
+                                            }
+                                        }, 100);
+                                    }
+                                }, 100);
+                            }
+                        }, 100);
+                    }
+                }, 500);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     public void run() throws Exception {
@@ -114,90 +192,6 @@ public class MainActivity extends BaseGameActivity {
                 // Save Response object to shared preference "of sorts"
                 Defaults.setWordList(responseObj, MainActivity.this);
                 Log.d("Response Successful", response.toString());
-            }
-        });
-    }
-
-    private void animateTapToPlay() {
-        mStartGameButton.setText("tap here to play");
-        mStartGameButton.startAnimation(fadeIn);
-        fadeIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mStartGameButton.startAnimation(fadeOut);
-                        fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                animateRhymeWithTheWords();
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                    }
-                }, 2000);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
-
-    private void animateRhymeWithTheWords() {
-        mStartGameButton.setText("rhyme with the words");
-        mStartGameButton.startAnimation(fadeIn);
-        fadeIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mStartGameButton.startAnimation(fadeOut);
-                        fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                animateTapToPlay();
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                    }
-                }, 2000);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
     }

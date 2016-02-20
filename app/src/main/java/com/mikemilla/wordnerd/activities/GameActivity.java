@@ -53,6 +53,8 @@ public class GameActivity extends BaseGameActivity {
     EightBitNominalTextView scoreTextView;
     EightBitNominalEditText rhymeEntry;
     EightBitNominalTextView rhymeGenerated;
+    View rhymeWithView;
+    View bobbleView;
     ImageButton backButton;
     CountDownTimer countdownTimer;
     ProgressBar progressBar;
@@ -186,6 +188,7 @@ public class GameActivity extends BaseGameActivity {
                     rhymeEntry.setText(space);
                     rhymeEntry.setSelection(space.length());
                 }
+
                 if (!s.toString().equals(back)) {
                     rhymeEntry.setText(back);
                     rhymeEntry.setSelection(back.length());
@@ -201,13 +204,6 @@ public class GameActivity extends BaseGameActivity {
                 // Engine
                 try {
                     String userInput = s.toString().toLowerCase();
-
-                    // Catch Duplicates
-                    if (hashedRhymes.contains(userInput)) {
-                        rhymeEntry.startAnimation(shake);
-                        return;
-                    }
-
                     if (!rhymeGenerated.getText().toString().equals(userInput)) {
                         if (!hashedRhymes.contains(userInput)) {
                             if (words.get(index).getSingles().contains(userInput)) {
@@ -231,9 +227,11 @@ public class GameActivity extends BaseGameActivity {
                             } else if (words.get(index).getDecuples().contains(userInput)) {
                                 crunchTheWord(10, userInput);
                             }
+                        } else {
+                            rhymeEntry.startAnimation(shake); // Catch Duplicates
                         }
                     } else {
-                        rhymeEntry.startAnimation(shake);
+                        rhymeEntry.startAnimation(shake); // Catch Copy Generated
                     }
                 } catch (Exception e) {
                     Toast.makeText(GameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -272,6 +270,43 @@ public class GameActivity extends BaseGameActivity {
 
             }
         });
+
+        // Tip View
+        rhymeWithView = findViewById(R.id.rhyme_with_view);
+        bobbleView = findViewById(R.id.bobble_view);
+        animateRhymeView(true);
+    }
+
+    public void animateRhymeView(boolean show) {
+        if (show) {
+            if (rhymeWithView.getVisibility() != View.VISIBLE) {
+                rhymeWithView.setVisibility(View.VISIBLE);
+            }
+            hideBobble();
+        } else {
+            rhymeWithView.setVisibility(View.GONE);
+            bobbleView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideBobble() {
+        bobbleView.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showBobble();
+            }
+        }, 500);
+    }
+
+    public void showBobble() {
+        bobbleView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideBobble();
+            }
+        }, 500);
     }
 
     public void crunchTheWord(int pointsAwarded, String userInput) {
@@ -318,6 +353,10 @@ public class GameActivity extends BaseGameActivity {
         score += pointsAwarded;
         hashedRhymes.add(userInput);
         Log.d("Rhymes Played", hashedRhymes.toString());
+
+        if (score > 0) {
+            animateRhymeView(false);
+        }
 
         // Animate Word Change
         rhymeGenerated.startAnimation(slideOutLeft);
@@ -385,6 +424,8 @@ public class GameActivity extends BaseGameActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(250);
 
+        rhymeEntry.setText(null);
+        countdownTimer.cancel();
         progressBar.setProgress(0);
         progressBar.setVisibility(View.GONE);
 

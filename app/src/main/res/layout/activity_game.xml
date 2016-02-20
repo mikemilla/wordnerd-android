@@ -23,6 +23,37 @@
         android:padding="25dp"
         android:textSize="25sp" />
 
+    <LinearLayout
+        android:id="@+id/rhyme_with_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rhyme_generated"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:alpha="0.8"
+        android:orientation="vertical">
+
+        <com.mikemilla.wordnerd.views.EightBitNominalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rhyme with"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="center"
+            android:src="@drawable/icon_down" />
+
+        <View
+            android:id="@+id/bobble_view"
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
+
+    </LinearLayout>
+
     <com.mikemilla.wordnerd.views.EightBitNominalTextView
         android:id="@+id/rhyme_generated"
         android:layout_width="wrap_content"

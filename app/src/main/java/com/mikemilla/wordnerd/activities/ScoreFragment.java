@@ -103,6 +103,7 @@ public class ScoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 gameActivity.onBackPressed();
+                gameActivity.animateRhymeView(true);
                 gameActivity.rhymeGenerated.startAnimation(gameActivity.slideInRight);
             }
         });

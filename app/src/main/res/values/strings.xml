@@ -21,45 +21,9 @@
     <string name="achievement_nifty_fifty">CgkI0ceIo-cSEAIQCg</string>
 
     <!-- Game Over -->
-    <string name="game_over">Game Over</string>
-    <string name="syllables">Score</string>
+    <string name="game_over">Out of time</string>
+    <string name="syllables">Syllables</string>
     <string name="best">Best</string>
-
-    <!-- Default Rhymes -->
-    <string name="default_rhymes">
-        {
-    "words": [
-        {
-            "word": "about",
-            "rhymes": {
-                "singles": [
-                    "bout", "clout", "crout", "doubt", "doutt", "drought", "flout", "fout", "gout", "grout", "hout", "knout", "kraut", "krout", "lout", "out", "pout", "prout", "raut", "route", "routt", "scout", "shout", "shrout", "snout", "spout", "sprout", "stout", "strout", "thuot", "tout", "devout", "abound"
-                ],
-                "doubles": [
-                     "account", "allow", "aloud", "amount", "announce", "around", "arouse", "aroused", "discount", "downtown", "endow", "hour", "meow", "profound", "pronounce", "recount", "renown", "surmount", "surround", "surround", "without"
-                ],
-                "triples": [
-                      "thereabout"
-                ]
-            }
-        },
-        {
-            "word": "amber",
-            "rhymes": {
-                "singles": [
-                    "bamber", "camber", "cambre", "clamber", "hamster", "gamber", "kamber", "schamber", "ambers", "ambler", "amor", "anchor", "ander", "anger", "anker", "answer", "azure", "bambi", "bangor", "banker", "banter", "brander", "camper", "cancer", "candor", "canker", "canter", "cantor", "clammer", "clamor", "damper", "dancer", "gambler", "gander", "glamor", "glamour", "grammar", "grammer", "grantor", "hammer", "hamper", "hamster", "hander", "hanker", "lamber", "lander", "manner", "pamper", "pander", "planner", "planter", "rambler", "rancor", "ranker", "sander", "scammer", "scamper", "slammer", "slander", "stabber", "stammer", "stamper", "stander", "tamper", "tanker", "tanner", "vampire", "zander"
-                ],
-                "doubles": [
-                     "commander", "enchanter", "leander", "lysander", "meander", "alexander", "coriander"
-                ],
-                "quadruples": [
-                     "salamander"
-                ]
-            }
-        }
-    ]
-}
-    </string>
     <string name="sign_out">Sign Out</string>
 
 </resources>
