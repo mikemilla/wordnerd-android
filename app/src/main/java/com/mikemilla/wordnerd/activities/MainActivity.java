@@ -1,6 +1,7 @@
 package com.mikemilla.wordnerd.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -51,8 +52,26 @@ public class MainActivity extends BaseGameActivity {
         main.setBackgroundColor(ContextCompat.getColor(this, R.color.blue));
 
         // Menu Button
-        ImageButton menuButton = (ImageButton) findViewById(R.id.menu_button);
-        menuButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        EightBitNominalTextView rateButton = (EightBitNominalTextView) findViewById(R.id.rate_button);
+        rateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (okFailed) {
+                    try {
+                        run();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=com.mikemilla.wordnerd"));
+                    startActivity(browserIntent);
+                }
+            }
+        });
+
+        // Menu Button
+        EightBitNominalTextView menuButton = (EightBitNominalTextView) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
