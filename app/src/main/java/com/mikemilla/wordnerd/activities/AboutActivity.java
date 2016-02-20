@@ -1,19 +1,13 @@
 package com.mikemilla.wordnerd.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -21,9 +15,6 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AboutActivity extends BaseGameActivity {
 
@@ -47,7 +38,7 @@ public class AboutActivity extends BaseGameActivity {
             }
         });
 
-        EightBitNominalTextView websiteButton = (EightBitNominalTextView) findViewById(R.id.footer);
+        EightBitNominalTextView websiteButton = (EightBitNominalTextView) findViewById(R.id.web_button);
         websiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,29 +47,13 @@ public class AboutActivity extends BaseGameActivity {
             }
         });
 
-        final LinearLayout pagination = (LinearLayout) findViewById(R.id.pagination);
-
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        Adapter adapter = new Adapter(getSupportFragmentManager(), getApplicationContext());
-        adapter.addFragment(PageFragment.newInstance("Rhymes dont have to be exact"));
-        adapter.addFragment(PageFragment.newInstance("Score is the amount of syllables you played"));
-        adapter.addFragment(PageFragment.newInstance("Swear words are acceptable"));
-        pager.setAdapter(adapter);
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
+        EightBitNominalTextView tweetButton = (EightBitNominalTextView) findViewById(R.id.tweet_button);
+        tweetButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/home/?status=@killamikemilla%20"));
+                startActivity(browserIntent);
             }
-
-            @Override
-            public void onPageSelected(int position) {
-                setDot(pagination, position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-
         });
 
         signOutButton = (EightBitNominalTextView) findViewById(R.id.sign_out_google_play);
@@ -91,13 +66,9 @@ public class AboutActivity extends BaseGameActivity {
             }
         });
 
-    }
+        EightBitNominalTextView contactMeTextView = (EightBitNominalTextView) findViewById(R.id.contact_me_text_view);
+        contactMeTextView.setText("If words are missing\n\nContact the creator");
 
-    public void setDot(LinearLayout parent, int position) {
-        for (int i = 0; i < parent.getChildCount(); i++) {
-            parent.getChildAt(i).setAlpha(0.1f);
-        }
-        parent.getChildAt(position).setAlpha(1f);
     }
 
     @Override
@@ -115,31 +86,6 @@ public class AboutActivity extends BaseGameActivity {
         super.onBackPressed();
         this.finish();
         overridePendingTransition(R.anim.scale_in, R.anim.slide_out_down);
-    }
-
-    static class Adapter extends FragmentStatePagerAdapter {
-
-        private final List<PageFragment> mFragments = new ArrayList<>();
-        private Context context;
-
-        public Adapter(FragmentManager fm, Context context) {
-            super(fm);
-            this.context = context;
-        }
-
-        public void addFragment(PageFragment fragment) {
-            mFragments.add(fragment);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
     }
 
     @Override
