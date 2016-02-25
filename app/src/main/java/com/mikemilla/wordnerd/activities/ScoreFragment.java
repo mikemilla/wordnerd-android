@@ -7,15 +7,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.games.Games;
 import com.mikemilla.wordnerd.R;
+import com.mikemilla.wordnerd.data.WordNerdApplication;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class ScoreFragment extends Fragment {
@@ -23,6 +24,7 @@ public class ScoreFragment extends Fragment {
     private GooglePlayGamesFragment gamesFragment;
     private static final int REQUEST_LEADERBOARD = 0;
     private static final int REQUEST_ACHIEVEMENTS = 1;
+    private Tracker mTracker;
     public static String SCORE_KEY = "score";
     public static String HIGH_SCORE_KEY = "high_score";
     public static String CURRENT_WORD_INDEX_KEY = "current_word_index";
@@ -36,6 +38,10 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Google Analytics
+        WordNerdApplication application = (WordNerdApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -81,15 +87,6 @@ public class ScoreFragment extends Fragment {
         }
         scoreTextView.setText(String.valueOf(lastScore));
 
-        try {
-            Log.d("Current Word", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getWord());
-            Log.d("Current Entry", gameActivity.rhymeEntry.getText().toString());
-            //Log.d("Current Acceptables", gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getSingles()
-                    //+ gameActivity.words.get(getArguments().getInt(CURRENT_WORD_INDEX_KEY)).getDoubles().toString());
-        } catch (Exception e) {
-            Toast.makeText(gameActivity, "" + e, Toast.LENGTH_SHORT).show();
-        }
-
         // Tint Back Button Color
         gameActivity.backButton.setColorFilter(ContextCompat.getColor(gameActivity, R.color.black));
 
@@ -102,6 +99,12 @@ public class ScoreFragment extends Fragment {
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Restart Game Button Click")
+                        .build());
+
                 gameActivity.onBackPressed();
                 gameActivity.animateRhymeView(true);
                 gameActivity.rhymeGenerated.startAnimation(gameActivity.slideInRight);
@@ -113,6 +116,12 @@ public class ScoreFragment extends Fragment {
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Leaderboard Button Click")
+                        .build());
+
                 if (gameActivity.getGoogleApiClient() != null) {
                     if (gameActivity.getGoogleApiClient().isConnected()) {
                         startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
@@ -129,6 +138,12 @@ public class ScoreFragment extends Fragment {
         achievementsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Achievements Button Click")
+                        .build());
+
                 if (gameActivity.getGoogleApiClient() != null) {
                     if (gameActivity.getGoogleApiClient().isConnected()) {
                         startActivityForResult(Games.Achievements.getAchievementsIntent(gameActivity.getGoogleApiClient()),

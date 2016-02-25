@@ -9,22 +9,30 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
+import com.mikemilla.wordnerd.data.WordNerdApplication;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class AboutActivity extends BaseGameActivity {
 
     GoogleApiClient mGoogleApiClient;
     EightBitNominalTextView signOutButton;
+    Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        // Google Analytics
+        WordNerdApplication application = (WordNerdApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         mGoogleApiClient = getApiClient();
 
@@ -42,6 +50,12 @@ public class AboutActivity extends BaseGameActivity {
         websiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Website Button Click")
+                        .build());
+
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mikemilla.com"));
                 startActivity(browserIntent);
             }
@@ -51,6 +65,12 @@ public class AboutActivity extends BaseGameActivity {
         tweetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Tweet Button Click")
+                        .build());
+
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/home/?status=@killamikemilla%20"));
                 startActivity(browserIntent);
             }

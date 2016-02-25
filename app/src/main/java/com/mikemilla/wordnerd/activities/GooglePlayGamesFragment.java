@@ -9,14 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
+import com.mikemilla.wordnerd.data.WordNerdApplication;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 
 public class GooglePlayGamesFragment extends Fragment {
 
     BaseGameActivity activity;
+    Tracker mTracker;
 
     public GooglePlayGamesFragment() {
     }
@@ -24,6 +28,10 @@ public class GooglePlayGamesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Google Analytics
+        WordNerdApplication application = (WordNerdApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -48,6 +56,12 @@ public class GooglePlayGamesFragment extends Fragment {
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Google Play Sign In - Yes Click")
+                        .build());
+
                 activity.onBackPressed();
                 Defaults.setSignIntoGooglePlayGames(true, activity);
                 activity.getGameHelper().beginUserInitiatedSignIn();
@@ -58,6 +72,12 @@ public class GooglePlayGamesFragment extends Fragment {
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Google Play Sign In - No Click")
+                        .build());
+
                 activity.onBackPressed();
                 Defaults.setSignIntoGooglePlayGames(false, activity);
             }

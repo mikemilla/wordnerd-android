@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Name -->
-    <string name="app_name">wordnerd</string>
+    <string name="app_name">Word Nerd</string>
     <string name="keyboard">Tap to open keyboard</string>
 
     <string name="yes">OK</string>
@@ -26,7 +26,7 @@
     <string name="syllables">Syllables</string>
     <string name="best">Best</string>
     <string name="sign_out">Sign Out</string>
-    <string name="menu">Menu</string>
+    <string name="menu">More</string>
     <string name="rate">Rate</string>
 
 </resources>

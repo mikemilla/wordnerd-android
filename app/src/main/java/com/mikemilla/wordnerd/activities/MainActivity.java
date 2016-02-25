@@ -13,11 +13,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.google.gson.Gson;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
 import com.mikemilla.wordnerd.data.Response;
+import com.mikemilla.wordnerd.data.WordNerdApplication;
 import com.mikemilla.wordnerd.views.AvenirTextView;
 import com.mikemilla.wordnerd.views.EightBitNominalTextView;
 import com.squareup.okhttp.Callback;
@@ -31,6 +34,7 @@ public class MainActivity extends BaseGameActivity {
 
     Animation slideOutLeftWord, slideOutLeftNerd, slideInRight;
     GooglePlayGamesFragment gamesFragment;
+    Tracker mTracker;
     boolean okFailed = false;
     boolean didCreateAnimation = false;
     OkHttpClient ok = new OkHttpClient();
@@ -40,6 +44,10 @@ public class MainActivity extends BaseGameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Google Analytics
+        WordNerdApplication application = (WordNerdApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         try {
             run();
@@ -63,6 +71,12 @@ public class MainActivity extends BaseGameActivity {
                         e.printStackTrace();
                     }
                 } else {
+
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("Rate Button Click")
+                            .build());
+
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://play.google.com/store/apps/details?id=com.mikemilla.wordnerd"));
                     startActivity(browserIntent);
@@ -82,6 +96,12 @@ public class MainActivity extends BaseGameActivity {
                         e.printStackTrace();
                     }
                 } else {
+
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Action")
+                            .setAction("More Button Click")
+                            .build());
+
                     Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_up, R.anim.scale_out);
@@ -94,6 +114,12 @@ public class MainActivity extends BaseGameActivity {
         mStartGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Start Game Button Click")
+                        .build());
+
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_up, R.anim.scale_out);

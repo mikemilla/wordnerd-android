@@ -29,11 +29,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
 import com.mikemilla.wordnerd.R;
 import com.mikemilla.wordnerd.data.Defaults;
+import com.mikemilla.wordnerd.data.WordNerdApplication;
 import com.mikemilla.wordnerd.data.Words;
 import com.mikemilla.wordnerd.views.AndroidBug5497Workaround;
 import com.mikemilla.wordnerd.views.EightBitNominalEditText;
@@ -64,6 +67,7 @@ public class GameActivity extends BaseGameActivity {
     ImageView cursorView;
     AnimationDrawable animationA, animationB, animationC;
     int progress;
+    Tracker mTracker;
 
     // Data
     ArrayList<Words> words = new ArrayList<>();
@@ -76,6 +80,10 @@ public class GameActivity extends BaseGameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // Google Analytics
+        WordNerdApplication application = (WordNerdApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         words = Defaults.getWordList(GameActivity.this);
         Collections.shuffle(words);
@@ -231,6 +239,13 @@ public class GameActivity extends BaseGameActivity {
                             rhymeEntry.startAnimation(shake); // Catch Duplicates
                         }
                     } else {
+
+                        Log.d("Action", "Rhyme Matched Generated");
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("Rhyme Matched Generated")
+                                .build());
+
                         rhymeEntry.startAnimation(shake); // Catch Copy Generated
                     }
                 } catch (Exception e) {
@@ -421,6 +436,31 @@ public class GameActivity extends BaseGameActivity {
 
     // When the timer runs out or out of words
     public void onGameOver() {
+
+        Log.d("Last Generated Rhyme", words.get(index).getWord());
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Last Generated Rhyme")
+                .setAction(words.get(index).getWord())
+                .build());
+
+        Log.d("Last Rhyme Attempt", rhymeEntry.getText().toString());
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Last Rhyme Attempt")
+                .setAction(rhymeEntry.getText().toString())
+                .build());
+
+        Log.d("Played Rhymes", hashedRhymes.toString());
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Played Rhymes")
+                .setAction(hashedRhymes.toString())
+                .build());
+
+        Log.d("Amount of Rhymes", "" + hashedRhymes.size());
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Amount of Rhymes")
+                .setAction("" + hashedRhymes.size())
+                .build());
+
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(250);
 
