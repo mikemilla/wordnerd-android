@@ -71,7 +71,7 @@ public class AboutActivity extends BaseGameActivity {
                         .setAction("Tweet Button Click")
                         .build());
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/home/?status=@killamikemilla%20"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/home/?status=@killamikemilla%20%23wordnerd%20"));
                 startActivity(browserIntent);
             }
         });
