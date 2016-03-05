@@ -105,6 +105,7 @@ public class ScoreFragment extends Fragment {
                         .setAction("Restart Game Button Click")
                         .build());
 
+                gameActivity.isGameOver = false;
                 gameActivity.onBackPressed();
                 gameActivity.animateRhymeView(true);
                 gameActivity.rhymeGenerated.startAnimation(gameActivity.slideInRight);

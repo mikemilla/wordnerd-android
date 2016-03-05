@@ -63,6 +63,7 @@ public class GameActivity extends BaseGameActivity {
     ProgressBar progressBar;
     Boolean isKeyboardOpen = false;
     boolean canShowKeyboardView = false;
+    boolean isGameOver = false;
     Animation slideOutLeft, slideInRight, backButtonSlideOutLeft, backButtonSlideInLeft, shake;
     ImageView cursorView;
     AnimationDrawable animationA, animationB, animationC;
@@ -190,66 +191,70 @@ public class GameActivity extends BaseGameActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String space = s.toString().replaceAll(" ", "");
-                String back = s.toString().replaceAll("\\u003F", "");
-                if (!s.toString().equals(space)) {
-                    rhymeEntry.setText(space);
-                    rhymeEntry.setSelection(space.length());
-                }
 
-                if (!s.toString().equals(back)) {
-                    rhymeEntry.setText(back);
-                    rhymeEntry.setSelection(back.length());
-                }
+                if (!isGameOver) {
 
-                if (rhymeEntry.getText().length() <= 0) {
-                    cursorView.setVisibility(View.VISIBLE);
-                    setRandomCursorAnimation();
-                } else {
-                    cursorView.setVisibility(View.GONE);
-                }
+                    String space = s.toString().replaceAll(" ", "");
+                    String back = s.toString().replaceAll("\\u003F", "");
+                    if (!s.toString().equals(space)) {
+                        rhymeEntry.setText(space);
+                        rhymeEntry.setSelection(space.length());
+                    }
 
-                // Engine
-                try {
-                    String userInput = s.toString().toLowerCase();
-                    if (!rhymeGenerated.getText().toString().equals(userInput)) {
-                        if (!hashedRhymes.contains(userInput)) {
-                            if (words.get(index).getSingles().contains(userInput)) {
-                                crunchTheWord(1, userInput);
-                            } else if (words.get(index).getDoubles().contains(userInput)) {
-                                crunchTheWord(2, userInput);
-                            } else if (words.get(index).getTriples().contains(userInput)) {
-                                crunchTheWord(3, userInput);
-                            } else if (words.get(index).getQuadruples().contains(userInput)) {
-                                crunchTheWord(4, userInput);
-                            } else if (words.get(index).getQuintuples().contains(userInput)) {
-                                crunchTheWord(5, userInput);
-                            } else if (words.get(index).getSextuples().contains(userInput)) {
-                                crunchTheWord(6, userInput);
-                            } else if (words.get(index).getSeptuples().contains(userInput)) {
-                                crunchTheWord(7, userInput);
-                            } else if (words.get(index).getOctuples().contains(userInput)) {
-                                crunchTheWord(8, userInput);
-                            } else if (words.get(index).getNonuples().contains(userInput)) {
-                                crunchTheWord(9, userInput);
-                            } else if (words.get(index).getDecuples().contains(userInput)) {
-                                crunchTheWord(10, userInput);
+                    if (!s.toString().equals(back)) {
+                        rhymeEntry.setText(back);
+                        rhymeEntry.setSelection(back.length());
+                    }
+
+                    if (rhymeEntry.getText().length() <= 0) {
+                        cursorView.setVisibility(View.VISIBLE);
+                        setRandomCursorAnimation();
+                    } else {
+                        cursorView.setVisibility(View.GONE);
+                    }
+
+                    // Engine
+                    try {
+                        String userInput = s.toString().toLowerCase();
+                        if (!rhymeGenerated.getText().toString().equals(userInput)) {
+                            if (!hashedRhymes.contains(userInput)) {
+                                if (words.get(index).getSingles().contains(userInput)) {
+                                    crunchTheWord(1, userInput);
+                                } else if (words.get(index).getDoubles().contains(userInput)) {
+                                    crunchTheWord(2, userInput);
+                                } else if (words.get(index).getTriples().contains(userInput)) {
+                                    crunchTheWord(3, userInput);
+                                } else if (words.get(index).getQuadruples().contains(userInput)) {
+                                    crunchTheWord(4, userInput);
+                                } else if (words.get(index).getQuintuples().contains(userInput)) {
+                                    crunchTheWord(5, userInput);
+                                } else if (words.get(index).getSextuples().contains(userInput)) {
+                                    crunchTheWord(6, userInput);
+                                } else if (words.get(index).getSeptuples().contains(userInput)) {
+                                    crunchTheWord(7, userInput);
+                                } else if (words.get(index).getOctuples().contains(userInput)) {
+                                    crunchTheWord(8, userInput);
+                                } else if (words.get(index).getNonuples().contains(userInput)) {
+                                    crunchTheWord(9, userInput);
+                                } else if (words.get(index).getDecuples().contains(userInput)) {
+                                    crunchTheWord(10, userInput);
+                                }
+                            } else {
+                                rhymeEntry.startAnimation(shake); // Catch Duplicates
                             }
                         } else {
-                            rhymeEntry.startAnimation(shake); // Catch Duplicates
+
+                            Log.d("Action", "Rhyme Matched Generated");
+                            mTracker.send(new HitBuilders.EventBuilder()
+                                    .setCategory("Action")
+                                    .setAction("Rhyme Matched Generated")
+                                    .build());
+
+                            rhymeEntry.startAnimation(shake); // Catch Copy Generated
                         }
-                    } else {
-
-                        Log.d("Action", "Rhyme Matched Generated");
-                        mTracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Action")
-                                .setAction("Rhyme Matched Generated")
-                                .build());
-
-                        rhymeEntry.startAnimation(shake); // Catch Copy Generated
+                    } catch (Exception e) {
+                        Toast.makeText(GameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
-                } catch (Exception e) {
-                    Toast.makeText(GameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -437,16 +442,18 @@ public class GameActivity extends BaseGameActivity {
     // When the timer runs out or out of words
     public void onGameOver() {
 
-        Log.d("Last Generated Rhyme", words.get(index).getWord());
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Last Generated Rhyme")
-                .setAction(words.get(index).getWord())
-                .build());
+        isGameOver = true;
 
         Log.d("Last Rhyme Attempt", rhymeEntry.getText().toString());
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Last Rhyme Attempt")
                 .setAction(rhymeEntry.getText().toString())
+                .build());
+
+        Log.d("Last Generated Rhyme", words.get(index).getWord());
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Last Generated Rhyme")
+                .setAction(words.get(index).getWord())
                 .build());
 
         Log.d("Played Rhymes", hashedRhymes.toString());
@@ -461,13 +468,13 @@ public class GameActivity extends BaseGameActivity {
                 .setAction("" + hashedRhymes.size())
                 .build());
 
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(250);
-
         rhymeEntry.setText(null);
         countdownTimer.cancel();
         progressBar.setProgress(0);
         progressBar.setVisibility(View.GONE);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(250);
 
         scoreFragment = ScoreFragment.newInstance(score, index);
         if (findViewById(R.id.game_over_container) != null) {
