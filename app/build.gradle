@@ -7,7 +7,7 @@ android {
         applicationId "com.mikemilla.wordnerd"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
+        versionCode 11
         versionName "Anna Banana"
     }
 
