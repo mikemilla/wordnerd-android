@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App Name -->
     <string name="app_name">Word Nerd</string>
     <string name="keyboard">Tap to open keyboard</string>
-
     <string name="yes">OK</string>
     <string name="no">Cancel</string>
     <string name="new_best">New best</string>
     <string name="tweet">Send Tweet</string>
     <string name="created_by">About Creator</string>
     <string name="tips">Tips</string>
-
-    <!-- Google Play Games  -->
     <string name="sign_into_games">Sign into Google Play Games</string>
-    <string name="leaderboard_high_scores">CgkI0ceIo-cSEAIQAg</string>
-    <string name="achievement_rhyme_time">CgkI0ceIo-cSEAIQAw</string>
-    <string name="achievement_decade_made">CgkI0ceIo-cSEAIQBA</string>
-    <string name="achievement_spaghetti_twenty">CgkI0ceIo-cSEAIQBQ</string>
-    <string name="achievement_dirty_thirty">CgkI0ceIo-cSEAIQBg</string>
-    <string name="achievement_forty_shortie">CgkI0ceIo-cSEAIQBw</string>
-    <string name="achievement_nifty_fifty">CgkI0ceIo-cSEAIQCg</string>
-
-    <!-- Game Over -->
     <string name="game_over">Out of time</string>
     <string name="syllables">Syllables</string>
     <string name="best">Best</string>
     <string name="sign_out">Sign Out</string>
     <string name="menu">More</string>
     <string name="rate">Rate</string>
-
 </resources>
