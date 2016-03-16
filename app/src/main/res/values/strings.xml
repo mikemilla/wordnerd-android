@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Word Nerd</string>
     <string name="keyboard">Tap to open keyboard</string>
     <string name="yes">OK</string>
     <string name="no">Cancel</string>
