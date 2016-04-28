@@ -8,8 +8,8 @@ A simple rhyming game
 
 ## Download
 
-https://play.google.com/store/apps/details?id=com.mikemilla.wordnerd
-http://mikemilla.com/wordnerd
+- https://play.google.com/store/apps/details?id=com.mikemilla.wordnerd
+- http://mikemilla.com/wordnerd
 
 ## Contact
 
