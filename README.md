@@ -1,6 +1,6 @@
 # Word Nerd - Rhyming Game (Android)
 
-The Android version of a game where you rhyme with as many words as you can until time runs out.
+A simple rhyming game
 
 
 ![alt tag](https://raw.githubusercontent.com/mikemilla/wordnerd-android/master/screenshot.gif)
