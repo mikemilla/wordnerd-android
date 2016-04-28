@@ -9,15 +9,15 @@ A simple rhyming game
 ## Download
 
 https://play.google.com/store/apps/details?id=com.mikemilla.wordnerd
+http://mikemilla.com/wordnerd
 
 ## Contact
 
 Michael Miller
 
-- https://github.com/mikemilla
-- https://dribbble.com/mikemilla
-- http://mikemilla.com/
 - mail@mikemilla.com
+- http://mikemilla.com
+- https://dribbble.com/mikemilla
 
 ## License
 
